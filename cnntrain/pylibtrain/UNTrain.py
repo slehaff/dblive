@@ -1,4 +1,4 @@
-# Autoencoder module for instant depth determination
+# changed sunday 11: Autoencoder module for instant depth determination
 from keras import layers
 import numpy as np
 import os
