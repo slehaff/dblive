@@ -8,6 +8,9 @@ import os.path
 from os import path
 
 
+mainpath = '/home/samir/Desktop/blender/pycode'
+samplecount = len(os.listdir(mainpath+'/trainin/'))
+
 rwidth = 160
 rheight = 160
 H = 160
@@ -208,11 +211,11 @@ def testarctan(folder):
 #############################################################################################################################
 # process files
 
-for i in range(99):
-    folder = '/home/samir/Desktop/blender/pycode/160planes/render'+ str(i)+'/'
+for i in range(samplecount):
+    folder = '/home/samir/Desktop/blender/pycode/trainin/render'+ str(i)+'/'
     if path.exists(folder):
-        # take_wrap4(folder, 'scan_wrap1.npy', 'im_wrap1.png', 'blenderimage', -1)
-        # take_wrap4(folder, 'scan_wrap2.npy', 'im_wrap2.png', 'blenderimage', 5)
+        take_wrap4(folder, 'scan_wrap1.npy', 'im_wrap1.png', 'blenderimage', -1)
+        take_wrap4(folder, 'scan_wrap2.npy', 'im_wrap2.png', 'blenderimage', 5)
         mask(folder)
 #############################################################################################################################
     # images = glob.glob(folder+'*/image1.png', recursive= True)

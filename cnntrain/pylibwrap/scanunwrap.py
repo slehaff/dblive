@@ -13,6 +13,8 @@ high_freq = 13
 low_freq = 1
 rwidth = 160
 rheight = 160
+H = 160
+W = 160
 
 
 # focalLength = 938.0
@@ -91,18 +93,6 @@ def deduct_ref(unwrap, reference, folder1, folder2):
     # net_data = np.multiply(net_data, 1.0)
     cv2.imwrite(folder1 + 'abs_unwrap.png', 40*net_data)
 
-
-def unwrap(request):
-    # folder = ScanFolder.objects.last().folderName
-    folder = '/home/samir/db2/scan/static/scan_folder/scan_im_folder/'
-    ref_folder = '/home/samir/db2/scan/static/scan_folder/scan_ref_folder'
-    three_folder = '/home/samir/db2/3D/static/3scan_folder'
-    unwrap_r('scan_wrap2.npy', 'scan_wrap1.npy', folder )
-    deduct_ref('unwrap.npy', 'unwrap.npy', folder, ref_folder)
-    # generate_color_pointcloud(folder + 'image1.png', folder + '/abs_unwrap.png', folder + '/pointcl.ply')
-    generate_json_pointcloud(folder + 'image1.png', folder +
-                             '/abs_unwrap.png', three_folder + '/pointcl.json')
-    return render(request, 'scantemplate.html')
 
 
 def makeDDbase(count):
@@ -214,6 +204,23 @@ print('depth')
 depth('160planes', 99, 199)
 print('makeclouds')
 makeclouds('160planes', 99)
+
+
+
+################################################################ repo #######################################################
+
+# def unwrap(request):
+#     # folder = ScanFolder.objects.last().folderName
+#     folder = '/home/samir/db2/scan/static/scan_folder/scan_im_folder/'
+#     ref_folder = '/home/samir/db2/scan/static/scan_folder/scan_ref_folder'
+#     three_folder = '/home/samir/db2/3D/static/3scan_folder'
+#     unwrap_r('scan_wrap2.npy', 'scan_wrap1.npy', folder )
+#     deduct_ref('unwrap.npy', 'unwrap.npy', folder, ref_folder)
+#     # generate_color_pointcloud(folder + 'image1.png', folder + '/abs_unwrap.png', folder + '/pointcl.ply')
+#     generate_json_pointcloud(folder + 'image1.png', folder +
+#                              '/abs_unwrap.png', three_folder + '/pointcl.json')
+#     return render(request, 'scantemplate.html')
+
 
 
 
