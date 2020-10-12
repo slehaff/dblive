@@ -17,10 +17,8 @@ H = 160
 W = 160
 
 
-# focalLength = 938.0
-# centerX = 319.5
-# centerY = 239.5
-# scalingFactor = 5000
+mainpath = '/home/samir/Desktop/blender/pycode'
+samplecount = len(os.listdir(mainpath+'/160spheres/'))
 
 PI = np.pi
 
@@ -103,18 +101,18 @@ def makeDDbase(count):
             print('u=', u, 'v=', v)
             for i in range(count):
                 # print('i=',i)
-                folder = '/home/samir/Desktop/blender/pycode/scanplanes/render'+ str(i)+'/'
+                folder = '/home/samir/Desktop/blender/pycode/160scanplanes/render'+ str(i)+'/'
                 unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
                 unwrap = np.load(folder+'unwrap.npy')   
                 phibase[u,v,i] = unwrap[u,v]
-    folder = '/home/samir/Desktop/blender/pycode/scanplanes/'
+    folder = '/home/samir/Desktop/blender/pycode/160scanplanes/'
     wr_save = folder + 'DDbase.npy'
     np.save(wr_save, phibase, allow_pickle=False)
 
 
 
 def makeDepth(folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/scanplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/160scanplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'unwrap.npy' )
     # print('DBase:', np.amax(DBase), np.amin(DBase))
@@ -196,14 +194,14 @@ def makeclouds(scanfolder, count):
    
 
 # print('scanumwrap')
-# # unw('scanplanes', 199)
-# # makeDDbase(199)
+# unw('160scanplanes', 299)
+# makeDDbase(299)
 
-unw('160planes', 99)
+unw('scans', 50)
 print('depth')
-depth('160planes', 99, 199)
+depth('scans', 50, 299)
 print('makeclouds')
-makeclouds('160planes', 99)
+makeclouds('scans', 50)
 
 
 
