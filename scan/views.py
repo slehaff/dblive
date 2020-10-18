@@ -56,9 +56,9 @@ def save_uploaded_file(handle, filepath):
 
 @csrf_exempt
 def pic(request):
-    f1 = '/home/samir/dblive/scan/static/scan_image_folder/black.png'
-    f2 = '/home/samir/dblive/scan/static/scan_image_folder/color.png'
-    f3 =  '/home/samir/dblive/scan/static/scan_image_folder/high.png'
+    f1 = '/home/samir/dblive/scan/static/scan_image_folder/black.jpeg'
+    f2 = '/home/samir/dblive/scan/static/scan_image_folder/color.jpeg'
+    f3 =  '/home/samir/dblive/scan/static/scan_image_folder/high.jpeg'
     print('picd')
     
     picform = PicForm()

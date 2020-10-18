@@ -301,15 +301,6 @@ def nndepth(scanfolder, count, basecount):
         makeDepth(folder, basecount)
 
 
-def unw(scanfolder, count):
-    for i in range(count):
-        print('start')
-
-        folder = '/home/samir/Desktop/blender/pycode/'+scanfolder+'/render'+ str(i)+'/'
-        print(folder)
-        if path.exists(folder):
-            unwrap_r('scan_wrap2.npy', 'scan_wrap1.npy', folder )
-
 
 def makeclouds(scanfolder, count):
      for i in range(count):
@@ -332,7 +323,7 @@ folder = '/home/samir/Desktop/blender/pycode/scans/render'
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
-for i in range(50):
+for i in range(30):
     folder = '/home/samir/Desktop/blender/pycode/scans/render'
     print('i:', i)
     mask(folder+str(i)+'/')
@@ -484,3 +475,12 @@ for i in range(50):
 #     im_depth = depth# np.max(unwrapdata)*255)
 #     cv2.imwrite(folder + 'nndepth.png', im_depth)
     
+
+# def unw(scanfolder, count):
+#     for i in range(count):
+#         print('start')
+
+#         folder = '/home/samir/Desktop/blender/pycode/'+scanfolder+'/render'+ str(i)+'/'
+#         print(folder)
+#         if path.exists(folder):
+#             unwrap_r('scan_wrap2.npy', 'scan_wrap1.npy', folder )

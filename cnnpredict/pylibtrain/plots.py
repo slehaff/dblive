@@ -16,6 +16,15 @@ def resize(img, w,h):
     return(img)
 
 
+
+def normalize_image(img):
+    # Normalizes the input image to range (0, 1) for visualization
+    img = img - np.min(img)
+    img = img/np.max(img)
+    return img
+
+
+
 def make_grayscale(img):
     # Transform color image to grayscale
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -30,20 +39,22 @@ def makemonohigh(folder):
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
 
-folder1 = '/home/samir/Desktop/blender/pycode/160planes/render2'
-folder2 = '/home/samir/Desktop/blender/pycode/160planes/render12'
+folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render5'
+folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render5'
 
 monohigh = np.zeros((H, W), dtype=np.float64)
-
-high = folder2 + '/cnnwrap1.png'
-colorhigh = cv2.imread(high, 1)
-colorhigh = resize(colorhigh, W, H)
-monohigh1 = make_grayscale(colorhigh)
 
 high = folder1 + '/cnnwrap1.png'
 colorhigh = cv2.imread(high, 1)
 colorhigh = resize(colorhigh, W, H)
+monohigh1 = make_grayscale(colorhigh)
+monohigh1 = 255*normalize_image(monohigh1)
+
+high = folder1 + '/im_wrap1.png'
+colorhigh = cv2.imread(high, 1)
+colorhigh = resize(colorhigh, W, H)
 monohigh2 = make_grayscale(colorhigh)
+monohigh2 = 255*normalize_image(monohigh2)
 
 
 x = range(160)
