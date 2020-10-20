@@ -39,8 +39,8 @@ def makemonohigh(folder):
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
 
-folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render5'
-folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render5'
+folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
+folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
 
 monohigh = np.zeros((H, W), dtype=np.float64)
 
@@ -50,7 +50,7 @@ colorhigh = resize(colorhigh, W, H)
 monohigh1 = make_grayscale(colorhigh)
 monohigh1 = 255*normalize_image(monohigh1)
 
-high = folder1 + '/im_wrap1.png'
+high = folder1 + '/blenderimage0.png'
 colorhigh = cv2.imread(high, 1)
 colorhigh = resize(colorhigh, W, H)
 monohigh2 = make_grayscale(colorhigh)
