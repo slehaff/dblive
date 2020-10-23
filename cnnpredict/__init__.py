@@ -18,7 +18,7 @@ def loopforever():
         b+=1
         time.sleep(20)
         if (len(myglobals.inque)>100):
-            for i in range(33):
+            for i in range(80):
                 f = folder + str(i)
                 os.mkdir(f)
                 black = myglobals.inque.popleft()

@@ -66,10 +66,9 @@ def normalize_image(img):
 
 
 def load_H_model():
-    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5')
+    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
     return(model)
-
-
+# /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 
 def load_L_model():
@@ -118,9 +117,14 @@ def DB_predict( model, x):
 
 def nnHprocess(folder):
     high = folder + 'blenderimage0.png'
-    image = cv2.imread(high, 1).astype(np.float32)
+    image1 = cv2.imread(high, 1).astype(np.float32)
+    black = folder + 'blenderblack.png'
+    image2 = cv2.imread(black,1).astype(np.float32)
+    image = image1 - image2
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
+    mask = np.load(folder+'mask.npy')
+    inp_1 = np.multiply(np.logical_not(mask), inp_1)
     # Hmodel = load_H_model()
 
     start = time.time()
@@ -140,6 +144,8 @@ def nnLprocess(folder):
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
+    mask = np.load(folder+'mask.npy')
+    inp_1 = np.multiply(np.logical_not(mask), inp_1)
     # Hmodel = load_H_model()
 
     start = time.time()

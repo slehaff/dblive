@@ -39,28 +39,69 @@ def makemonohigh(folder):
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
 
-folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
-folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
+# folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
+# folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render1'
 
-monohigh = np.zeros((H, W), dtype=np.float64)
+# monohigh = np.zeros((H, W), dtype=np.float64)
 
-high = folder1 + '/cnnwrap1.png'
-colorhigh = cv2.imread(high, 1)
-colorhigh = resize(colorhigh, W, H)
-monohigh1 = make_grayscale(colorhigh)
-monohigh1 = 255*normalize_image(monohigh1)
+# high = folder1 + '/cnnwrap1.png'
+# colorhigh = cv2.imread(high, 1)
+# colorhigh = resize(colorhigh, W, H)
+# monohigh1 = make_grayscale(colorhigh)
+# monohigh1 = 255*normalize_image(monohigh1)
 
-high = folder1 + '/blenderimage0.png'
-colorhigh = cv2.imread(high, 1)
-colorhigh = resize(colorhigh, W, H)
-monohigh2 = make_grayscale(colorhigh)
-monohigh2 = 255*normalize_image(monohigh2)
+# high = folder1 + '/blenderimage0.png'
+# colorhigh = cv2.imread(high, 1)
+# colorhigh = resize(colorhigh, W, H)
+# monohigh2 = make_grayscale(colorhigh)
+# monohigh2 = 255*normalize_image(monohigh2)
+
+
+# x = range(160)
+
+# for i in range(0,160,20):
+#     plt.plot(x, monohigh1[:,i],
+#     x, monohigh2[:,i])
+#     plt.ylabel(str(i)) 
+#     plt.show()
 
 
 x = range(160)
+for i in range(30):
+    folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/scans/render'+str(i)
 
-for i in range(0,160,20):
-    plt.plot(x, monohigh1[:,i],
-    x, monohigh2[:,i])
+    monohigh = np.zeros((H, W), dtype=np.float64)
+
+    high = folder1 + '/blenderimage0.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh1 = make_grayscale(colorhigh)
+    monohigh1 = 255*normalize_image(monohigh1)
+    high = folder1 + '/cnnwrap1.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh3 = make_grayscale(colorhigh)
+    monohigh3 = 255*normalize_image(monohigh3)
+
+    high = folder2 + '/blenderimage0.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh2 = make_grayscale(colorhigh)
+    monohigh2 = 255*normalize_image(monohigh2)
+    high = folder2 + '/cnnwrap1.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh4 = make_grayscale(colorhigh)
+    monohigh4 = 255*normalize_image(monohigh4)
+
+    plt.plot(
+    x, monohigh1[:,80],'g',
+    x, monohigh3[:,80],'m')
+    plt.ylabel(str(i)) 
+    plt.show()
+    plt.plot(
+    x, monohigh2[:,80],'r',
+    x, monohigh4[:,80],'b')
     plt.ylabel(str(i)) 
     plt.show()

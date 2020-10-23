@@ -24,8 +24,8 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/160planes/'
-IMAGECOUNT = len(os.listdir(inputFolder))-2
+inputFolder = '/home/samir/Desktop/blender/pycode/scans/'
+IMAGECOUNT = len(os.listdir(inputFolder))-5
 
 
 def make_grayscale(img):
@@ -69,6 +69,7 @@ def to_array(folder_path, array, file_count):
 def to_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
         myfile = folder_path + str(i)+'/'+ filename + '.png'
+        print(myfile)
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
@@ -102,8 +103,8 @@ def to_npy_array(folder_path, array, file_count):
 fringe_images = []
 unwrap_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+ '/render', 'im_wrap1', fringe_images, IMAGECOUNT)
-to_png_array(inputFolder + '/render', 'kdata' , unwrap_images, IMAGECOUNT)
+to_png_array(inputFolder+ '/render', 'blenderimage0', fringe_images, IMAGECOUNT) #im_wrap1
+to_png_array(inputFolder + '/render', 'im_wrap1' , unwrap_images, IMAGECOUNT) #kdata
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -304,20 +305,20 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 95, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder + '/render' + str(i)+'/blenderimage0.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/kdata.png'
+    myfile = inputFolder + '/render' + str(i)+'/im_wrap1.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-wrap-kdata'+'-200-adam-noBN.h5')
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
 cv2.imwrite('validate/'+'UNet02-224-wrap-kdata'+'-200-adam-noBN.png',
             (1.0*combotot).astype(np.uint8))
