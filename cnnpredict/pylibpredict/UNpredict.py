@@ -120,7 +120,7 @@ def nnHprocess(folder):
     image1 = cv2.imread(high, 1).astype(np.float32)
     black = folder + 'blenderblack.png'
     image2 = cv2.imread(black,1).astype(np.float32)
-    image = image1 - image2
+    image = image1 #- image2
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
     mask = np.load(folder+'mask.npy')
@@ -324,22 +324,25 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+# folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
-for i in range(30):
-    folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+for i in range(1):
+    # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+    folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
+
     print('i:', i)
-    mask(folder+str(i)+'/')
+    mask(folder+'/')
     # unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
-    nnHprocess(folder + str(i)+'/')
-    nnLprocess(folder+str(i)+'/')
-    unwrap_k(folder+str(i)+'/')
-    makeDepth(folder+ str(i)+ '/', 299)
-    folder=folder + str(i) +'/'
+    # nnHprocess(folder + str(i)+'/')
+    nnLprocess(folder+'/')
+    unwrap_k(folder+'/')
+    makeDepth(folder+ '/', 299)
+    folder=folder +'/'
     generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
