@@ -5,7 +5,7 @@ from PIL import Image
 width = 4096
 height = 2732
 hfperiods = 140
-periods = 6
+periods = 12
 
 
 def maketexture(h, w, value):
@@ -27,7 +27,7 @@ def makeimage(h, w, wvcount, phi):
     ima = np.zeros((w, h))
     imaline = np.ones(w)
     for i in range(w):
-        imaline[i] = 255.0*(1.0/2.0 + 1.0/2.0*np.cos(2.0*np.pi*(float(phi)/12.0 + wvcount*float(i)/float(w))))
+        imaline[i] = 255.0*(1.0/2.0 + 1.0/2.0*np.cos(2.0*np.pi*(float(phi)/12.0+ np.pi/2 + wvcount*float(i)/float(w))))
     print(imaline)
     for j in range(h):
         ima[:, j] = imaline
