@@ -24,6 +24,7 @@ def makeblack(h, w, value):
 
 
 def makeimage(h, w, wvcount, phi):
+    cima = np.zeros([w,h,3])
     ima = np.zeros((w, h))
     imaline = np.ones(w)
     for i in range(w):
@@ -32,7 +33,9 @@ def makeimage(h, w, wvcount, phi):
     for j in range(h):
         ima[:, j] = imaline
     # ima = np.transpose(ima)
-    cv2.imwrite('/home/samir/dblive/cosines/6cos/'+ str(phi + 1) + '_cos.jpg', ima)
+    cima[:,:,1] = ima
+
+    cv2.imwrite('/home/samir/dblive/cosines/6cos/'+ str(phi + 1) + '_cos.jpg', cima)
 
 # folder = "/home/samir/dblive/cosines/singleshotcosines/"
 
