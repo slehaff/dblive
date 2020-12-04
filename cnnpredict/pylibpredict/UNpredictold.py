@@ -85,14 +85,14 @@ def makemonohigh(folder):
 
 
 def mask(folder):
-    color = folder + 'image8.png'
+    color = folder + 'blendertexture.png'
     print('color:', color)
     img1 = np.zeros((H, W), dtype=np.float)
     img1 = cv2.imread(color, 1).astype(np.float32)
     gray = make_grayscale(img1)
 
 
-    black = folder + 'image9.png'
+    black = folder + 'blenderblack.png'
     img2 = np.zeros((H, W), dtype=np.float)
     img2 = cv2.imread(black, 0).astype(np.float32)
     diff1 = np.subtract(gray, .5*img2)
@@ -116,9 +116,9 @@ def DB_predict( model, x):
 
 
 def nnHprocess(folder):
-    high = folder + 'image0.png'
+    high = folder + 'blenderimage0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    black = folder + 'image9.png'
+    black = folder + 'blenderblack.png'
     image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
@@ -135,12 +135,12 @@ def nnHprocess(folder):
     mask = np.load(folder+'mask.npy')
     wrapH = np.multiply(np.logical_not(mask), predicted_img)
     wrapH = resize(wrapH, W, H)
-    np.save(folder + 'unwrap1.npy', wrapH, allow_pickle=False)
-    cv2.imwrite( folder + 'unwrap1.png',255*wrapH)
+    np.save(folder + 'cnnwrap1.npy', wrapH, allow_pickle=False)
+    cv2.imwrite( folder + 'cnnwrap1.png',255*wrapH)
     return  #(predicted_img[0], predicted_img[1])
 
 def nnLprocess(folder):
-    high = folder + 'unwrap1.png'
+    high = folder + 'cnnwrap1.png'
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
@@ -173,7 +173,7 @@ def unwrap_k(folder):
     kdata = np.load(folder + '/nnkdata.npy')
 
     # wraplow = resize(wraplow, W, H)  # To be continued
-    wraphigh = 6.4*np.load(folder + '/unwrap1.npy')
+    wraphigh = 6.4*np.load(folder + '/cnnwrap1.npy')
     print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     print('kdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
     # wraphigh = normalize_image(wraphigh)
@@ -205,7 +205,7 @@ def makeDDbase(count):
 
 
 def makeDepth( folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/300numplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/299scanplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'/nnkunwrap.npy' )
     # print('DBase:', np.amax(DBase), np.amin(DBase))
@@ -228,7 +228,7 @@ def makeDepth( folder, basecount):
     # print('depth:', np.amax(depth), np.amin(depth))
     # print(depth)
     im_depth = depth# np.max(unwrapdata)*255)
-    cv2.imwrite(folder + '/nndepth.png', im_depth)
+    cv2.imwrite(folder + 'nndepth.png', im_depth)
 
 
 
@@ -325,12 +325,12 @@ def makeclouds(scanfolder, count):
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
 # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-folder = '/home/samir/Desktop/blender/pycode/160spheres/render'
-bfolder = '/home/samir/Desktop/blender/pycode/160spheres/'
+folder = '/home/samir/Desktop/blender/pycode/scanspredict10/render'
+bfolder = '/home/samir/Desktop/blender/pycode/scanspredict10/'
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
-for i in range(len(os.listdir(bfolder))-1):
+for i in range(10):  #(len(os.listdir(bfolder))):
     # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
@@ -343,7 +343,7 @@ for i in range(len(os.listdir(bfolder))-1):
     unwrap_k(folder + str(i)+'/')
     makeDepth(folder+ str(i), 299)
     # folder=folder +'/'
-    generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
+    generate_pointcloud(folder+str(i) + '/blendertexture.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)

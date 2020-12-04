@@ -1,4 +1,4 @@
-# changed sunday 11: Autoencoder module for instant depth determination
+# Autoencoder module for instant depth determination
 from keras import layers
 import numpy as np
 import os
@@ -69,7 +69,6 @@ def to_array(folder_path, array, file_count):
 def to_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
         myfile = folder_path + str(i)+'/'+ filename + '.png'
-        print(myfile)
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
@@ -100,11 +99,11 @@ def to_npy_array(folder_path, array, file_count):
 
 
 # Load and pre-process the training data
-fringe_images = []
-unwrap_images = []
+wrap_images = []
+k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+ '/render', 'blenderimage0', fringe_images, IMAGECOUNT) #im_wrap1
-to_png_array(inputFolder + '/render', 'im_wrap1' , unwrap_images, IMAGECOUNT) #kdata
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -112,11 +111,11 @@ to_png_array(inputFolder + '/render', 'im_wrap1' , unwrap_images, IMAGECOUNT) #k
 # to_array('/home/samir/serverless/new1-469/unwrap/', unwrap_images, IMAGECOUNT)
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
-fringe_images = np.expand_dims(fringe_images, -1)
-unwrap_images = np.expand_dims(unwrap_images, -1)
-print("input shape: {}".format(fringe_images.shape))
+wrap_images = np.expand_dims(wrap_images, -1)
+k_images = np.expand_dims(k_images, -1)
+print("input shape: {}".format(wrap_images.shape))
 # print("output shape: {}".format(nom_images.shape))
-print(len(fringe_images))
+print(len(wrap_images))
 
 
 
@@ -248,7 +247,7 @@ checkpointer = ModelCheckpoint(
 def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
-        history_temp = model.fit(fringe_images, unwrap_images,
+        history_temp = model.fit(wrap_images, k_images,
                                  batch_size=4,
                                  epochs=1,
                                  validation_split=0.2,
@@ -296,29 +295,29 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder + '/render' + str(1)+'/im_wrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 95, 1):
+for i in range(30, 100, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/blenderimage0.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/kdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-wrap-kdata'+'-200-adam-noBN.h5')
 cv2.imwrite('validate/'+'UNet02-224-wrap-kdata'+'-200-adam-noBN.png',
             (1.0*combotot).astype(np.uint8))
