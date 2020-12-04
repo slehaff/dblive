@@ -205,7 +205,7 @@ def makeDDbase(count):
 
 
 def makeDepth( folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/160scanplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/299scanplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'/nnkunwrap.npy' )
     # print('DBase:', np.amax(DBase), np.amin(DBase))
@@ -325,8 +325,8 @@ def makeclouds(scanfolder, count):
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
 # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/160spheres/render'
+bfolder = '/home/samir/Desktop/blender/pycode/160spheres/'
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
@@ -341,9 +341,9 @@ for i in range(len(os.listdir(bfolder))):
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
     unwrap_k(folder + str(i)+'/')
-    # makeDepth(folder+ '/', 299)
+    makeDepth(folder+ str(i), 299)
     # folder=folder +'/'
-    # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
+    generate_pointcloud(folder+str(i) + '/blendertexture.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)
