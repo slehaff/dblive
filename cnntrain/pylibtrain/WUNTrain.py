@@ -234,12 +234,12 @@ model = UModel
 
 def load_model():
     model = keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet01-350-unwrap-1000-adam-noBN.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-fringe-wrapdata'+'-100-adam-noBN.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -258,7 +258,7 @@ def fct_train(model):
         # convweights.append(model.layers[0].get_weights()[0].squeeze())
 
 
-fct_train(model)
+# fct_train(model)
 
 
 def plot():
@@ -275,7 +275,7 @@ def plot():
     plt.savefig('trainingvalidationlossgx.png')
 
 
-plot()
+# plot()
 
 
 def combImages(i1, i2, i3):
@@ -302,7 +302,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 95, 1):
+for i in range(0, 15, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder + '/render' + str(i)+'/image0.png'
@@ -319,6 +319,6 @@ for i in range(0, 95, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-cv2.imwrite('validate/'+'UNet02-224-wrap-kdata'+'-200-adam-noBN.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-fringe-wrapdata'+'-100-adam-noBN.h5')
+cv2.imwrite('validate/'+'UNet02-31-wrap-kdata'+'-200-adam-noBN.png',
             (1.0*combotot).astype(np.uint8))
