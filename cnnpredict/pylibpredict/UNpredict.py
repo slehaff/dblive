@@ -73,7 +73,7 @@ def load_H_model():
 
 
 def load_L_model():
-    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-wrap-kdata'+'-200-adam-noBN.h5')
+    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-wrap-kdata'+'-100-adam-noBN.h5')
     return(model)
 
 
@@ -117,9 +117,9 @@ def DB_predict( model, x):
 
 
 def nnHprocess(folder):
-    high = folder + 'blenderimage0.png'
+    high = folder + 'blenderimage0.png' #'blenderimage0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    black = folder + 'blenderblack.png'
+    black = folder + 'blenderblack.png' #'' blenderblack.png
     image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
@@ -145,8 +145,8 @@ def nnLprocess(folder):
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
-    mask = np.load(folder+'mask.npy')
-    inp_1 = np.multiply(np.logical_not(mask), inp_1)
+    # mask = np.load(folder+'mask.npy')
+    # inp_1 = np.multiply(np.logical_not(mask), inp_1)
     # Hmodel = load_H_model()
 
     start = time.time()
@@ -154,14 +154,14 @@ def nnLprocess(folder):
     end = time.time()
     print('elapsed low:', end-start)
 
-    mask = np.load(folder+'mask.npy')
-    kdata = np.multiply(np.logical_not(mask), predicted_img)
-    kdatay = 255/6*kdata
-    kdatay = np.round(kdatay)
-    print('kdatay:', kdatay[::40, ::40])
-    np.save(folder + 'nnkdata.npy', kdatay, allow_pickle=False)
-    cv2.imwrite( folder + 'nnkdata.png',255*kdata)
-    print('255*kdata:', 255*kdata[::40, ::40])
+    # mask = np.load(folder+'mask.npy')
+    # kdata = np.multiply(np.logical_not(mask), predicted_img)
+    # kdatay = 255/6*predicted_img
+    # kdatay = np.round(kdatay)
+    # print('kdatay:', kdatay[::40, ::40])
+    np.save(folder + 'nnkdata.npy', 1*predicted_img, allow_pickle=False)
+    cv2.imwrite( folder + 'nnkdata.png',255*predicted_img)
+    # print('255*kdata:', 255*kdata[::40, ::40])
 
 
     return  #(predicted_img[0], predicted_img[1])
@@ -325,8 +325,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/scans224/render'
+bfolder = '/home/samir/Desktop/blender/pycode/scans224/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
@@ -341,8 +341,8 @@ for i in range(len(os.listdir(bfolder))):
     # unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
     nnHprocess(folder + str(i)+'/')
-    # nnLprocess(folder + str(i)+'/')
-    # unwrap_k(folder + str(i)+'/')
+    nnLprocess(folder + str(i)+'/')
+    unwrap_k(folder + str(i)+'/')
     # makeDepth(folder+ str(i), 299)
     # folder=folder +'/'
     # generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')

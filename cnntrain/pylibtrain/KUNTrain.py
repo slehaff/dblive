@@ -301,7 +301,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 15, 1):
+for i in range(0, 29, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
@@ -318,6 +318,6 @@ for i in range(0, 15, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-wrap-kdata'+'-200-adam-noBN.h5')
-cv2.imwrite('validate/'+'UNet02-24-wrap-kdata'+'-100-adam-noBN.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-wrap-kdata'+'-100-adam-noBN.h5')
+cv2.imwrite('validate/'+'UNet02-24-2-wrap-kdata'+'-100-adam-noBN.png',
             (1.0*combotot).astype(np.uint8))
