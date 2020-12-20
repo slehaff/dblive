@@ -23,9 +23,9 @@ from keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/scans/'
-IMAGECOUNT = len(os.listdir(inputFolder))
+EPOCHS = 200
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
+IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 
 def make_grayscale(img):
@@ -68,6 +68,7 @@ def to_array(folder_path, array, file_count):
 
 def to_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
+        print('count:', i)
         myfile = folder_path + str(i)+'/'+ filename + '.png'
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
@@ -301,7 +302,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 29, 1):
+for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
@@ -318,6 +319,6 @@ for i in range(0, 29, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-wrap-kdata'+'-100-adam-noBN.h5')
-cv2.imwrite('validate/'+'UNet02-24-2-wrap-kdata'+'-100-adam-noBN.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-wrap-kdata'+'-200-adam-noBN.h5')
+cv2.imwrite('validate/'+'UNet02-400-wrap-kdata'+'-200-adam-noBN.png',
             (1.0*combotot).astype(np.uint8))

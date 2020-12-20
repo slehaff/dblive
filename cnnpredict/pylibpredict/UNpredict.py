@@ -67,13 +67,13 @@ def normalize_image(img):
 
 def load_H_model():
     # model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-fringe-wrapdata'+'-100-adam-noBN.h5')
+    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-fringe-wrapdata'+'-200-adam-noBN.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 
 def load_L_model():
-    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-wrap-kdata'+'-100-adam-noBN.h5')
+    model = keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-wrap-kdata'+'-200-adam-noBN.h5')
     return(model)
 
 
@@ -174,16 +174,17 @@ def unwrap_k(folder):
     kdata = np.load(folder + '/nnkdata.npy')
 
     # wraplow = resize(wraplow, W, H)  # To be continued
-    wraphigh = 6.4*np.load(folder + '/unwrap1.npy')
+    wraphigh = np.load(folder + '/unwrap1.npy')
     print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     print('kdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
     # wraphigh = normalize_image(wraphigh)
     # wraphigh = 2*PI*wraphigh
     # print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     unwrapdata = np.add(wraphigh, np.multiply(2*PI,kdata) )
+    print('kdata:', kdata[::40, ::40])
     wr_save = folder + '/nnkunwrap.npy'
     np.save(wr_save, unwrapdata, allow_pickle=False)
-    cv2.imwrite(folder + '/nnkunwrap.png', 1.0*unwrapdata)
+    cv2.imwrite(folder + '/nnkunwrap.png', 3.0*unwrapdata)
 
 
 
@@ -325,8 +326,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/scans224/render'
-bfolder = '/home/samir/Desktop/blender/pycode/scans224/'
+folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
