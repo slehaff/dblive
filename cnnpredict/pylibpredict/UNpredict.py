@@ -117,9 +117,9 @@ def DB_predict( model, x):
 
 
 def nnHprocess(folder):
-    high = folder + 'blenderimage0.png' #'blenderimage0.png'
+    high = folder + 'image0.png' #'blenderimage0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    black = folder + 'blenderblack.png' #'' blenderblack.png
+    black = folder + 'image9.png' #'' blenderblack.png
     image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
@@ -326,8 +326,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/metal5/render'
+bfolder = '/home/samir/Desktop/blender/pycode/metal5/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
@@ -343,7 +343,7 @@ for i in range(len(os.listdir(bfolder))):
     # makemonohigh(folder+'i')
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
-    unwrap_k(folder + str(i)+'/')
+    # unwrap_k(folder + str(i)+'/')
     # makeDepth(folder+ str(i), 299)
     # folder=folder +'/'
     # generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
