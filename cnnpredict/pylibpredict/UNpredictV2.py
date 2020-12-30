@@ -173,6 +173,7 @@ def unwrap_k(folder):
     wraphigh = np.zeros((H, W), dtype=np.float64)
     unwrapdata = np.zeros((H, W), dtype=np.float64)
     kdata = np.load(folder + '/nnkdata.npy')
+    # kdata = np.matrix.round(45*kdata)
 
     # wraplow = resize(wraplow, W, H)  # To be continued
     wraphigh = np.load(folder + '/unwrap1.npy')
@@ -344,7 +345,7 @@ for i in range(len(os.listdir(bfolder))):
     # makemonohigh(folder+'i')
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
-    # unwrap_k(folder + str(i)+'/')
+    unwrap_k(folder + str(i)+'/')
     # makeDepth(folder+ str(i), 299)
     # folder=folder +'/'
     # generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
