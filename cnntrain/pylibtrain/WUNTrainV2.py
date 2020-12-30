@@ -319,6 +319,6 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-fringe-wrapdata'+'-200-adam-noBNV2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-400-fringe-wrap'+'-200-adam-noBN.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-800-WUN-200-V2.png',
             (1.0*combotot).astype(np.uint8))
