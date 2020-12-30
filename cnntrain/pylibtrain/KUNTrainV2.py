@@ -23,9 +23,9 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 5
+EPOCHS = 100
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
-IMAGECOUNT = len(os.listdir(inputFolder))-1
+IMAGECOUNT = len(os.listdir(inputFolder))
 
 
 def make_grayscale(img):
