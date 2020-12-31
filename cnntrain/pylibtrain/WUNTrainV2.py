@@ -234,7 +234,7 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-31-fringe-wrapdata'+'-100-adam-noBNV2.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5')
     model.summary()
     return(model)
 
