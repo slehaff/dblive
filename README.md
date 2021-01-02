@@ -7,6 +7,8 @@ every 20 sec, inque is polled and buffers are moved to individual render(i) buff
 Init__.py in pylibtrain i cnnpredict has a loop for moving incooming images from inque to individual folders
 Destination folder is: folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
 
+ssh pi@danwand.local
+
 Training is a major task for dblive, Folder format for valid input is:
 UNTrain.py is the main training input py, this is a Unet trainer with an identical neural net for processing:
     HFringe to HWrapped

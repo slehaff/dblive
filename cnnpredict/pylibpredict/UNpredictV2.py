@@ -74,7 +74,7 @@ def load_H_model():
 
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-wrap-kdata'+'-200-adam-noBN.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5')
     return(model)
 
 
@@ -328,8 +328,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/metal5/render'
-bfolder = '/home/samir/Desktop/blender/pycode/metal5/'
+folder = '/home/samir/Desktop/blender/pycode/scans5/render'
+bfolder = '/home/samir/Desktop/blender/pycode/scans5/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
