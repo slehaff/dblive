@@ -173,10 +173,11 @@ def unwrap_k(folder):
     wraphigh = np.zeros((H, W), dtype=np.float64)
     unwrapdata = np.zeros((H, W), dtype=np.float64)
     kdata = np.load(folder + '/nnkdata.npy')
+    kdata = np.round(37.5*kdata)
     # kdata = np.matrix.round(45*kdata)
 
     # wraplow = resize(wraplow, W, H)  # To be continued
-    wraphigh = np.load(folder + '/unwrap1.npy')
+    wraphigh = 5.8*(np.load(folder + '/unwrap1.npy'))
     print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     print('kdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
     # wraphigh = normalize_image(wraphigh)
@@ -234,6 +235,44 @@ def makeDepth( folder, basecount):
     im_depth = depth# np.max(unwrapdata)*255)
     cv2.imwrite(folder + '/nndepth.png', im_depth)
 
+def newDepth(folder, basecount):
+    basefile = '/home/samir/Desktop/blender/pycode/400newplanes/DDbase.npy'
+    DBase = np.load(basefile)
+    unwrap = np.load(folder+'/unwrap.npy' )
+    # print('DBase:', np.amax(DBase), np.amin(DBase))
+    # print('unwrap:', np.amax(unwrap), np.amin(unwrap))
+    depth = np.zeros((H, W), dtype=np.float64)
+    zee=0
+    for i in range(W):
+        # print('i:', i)
+        for j in range(H):
+            s=0
+            for s in range(0, basecount-1,10):
+                if (unwrap[i,j]< DBase[i,j,s]):
+                    ds = (unwrap[i,j] - DBase[i,j,s])/( DBase[i,j,s]- DBase[i,j,s-10])
+                    zee = s+ds*10
+                    # if(i==80 and j==80 ):
+                    #     print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
+                    # else:
+                    #     if(i==82 and j==82 ):
+                    #         print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
+                    break
+                else:
+                    s+=1
+                    if s==400:
+                        print('not found!')
+
+            # print(i,j,unwrap[i,j],DBase[i,j,s])
+            if zee == 0:
+                print('not found')
+            depth[i,j]= (zee/400*-40 + 55)*1
+            # print('found:',i,j, unwrap[i,j], DBase[i,j,s],s)
+            # print(s)
+    # print('depth:', np.amax(depth), np.amin(depth))
+    im_depth = depth# np.max(unwrapdata)*255)
+    cv2.imwrite(folder + '/nndepth.png', im_depth)
+    print(folder+'/nndepth.png')
+    np.save(folder+'/nndepth.npy' ,im_depth , allow_pickle=False)
 
 
     
@@ -301,7 +340,7 @@ def depth(scanfolder, count, basecount):
     for i in range(count):
         print('progress:', str(i))
         folder = '/home/samir/Desktop/blender/pycode/'+scanfolder+'/render'+ str(i)+'/'
-        makeDepth(folder, basecount)
+        newDepth(folder, basecount)
 
 
 def nndepth(scanfolder, count, basecount):
@@ -320,20 +359,20 @@ def makeclouds(scanfolder, count):
         if path.exists(folder):
             # generate_pointcloud(folder + 'blendertexture.png', folder + '5mask.png' , folder + 'im_wrap1.png', folder +'pointcl-high.ply')
             # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png' , folder + 'im_wrap2.png', folder +'pointcl-low.ply')
-            generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png', folder + 'nnkunwrap.png', folder +'pointcl-unw.ply')
-            generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-depth.ply')
+            # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png', folder + 'nnkunwrap.png', folder +'pointcl-unw.ply')
+            generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
 
 
 
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/scans5/render'
-bfolder = '/home/samir/Desktop/blender/pycode/scans5/'
+folder = '/home/samir/Desktop/blender/pycode/stitch/render'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
-Lmodel = load_L_model()
-Hmodel = load_H_model()
+# Lmodel = load_L_model()
+# Hmodel = load_H_model()
 
 for i in range(len(os.listdir(bfolder))):
     # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
@@ -343,12 +382,12 @@ for i in range(len(os.listdir(bfolder))):
     # mask(folder+str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
-    nnHprocess(folder + str(i)+'/')
-    nnLprocess(folder + str(i)+'/')
+    # nnHprocess(folder + str(i)+'/')
+    # nnLprocess(folder + str(i)+'/')
     unwrap_k(folder + str(i)+'/')
-    # makeDepth(folder+ str(i), 299)
-    # folder=folder +'/'
-    # generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
+    newDepth(folder+ str(i), 400)
+    folder=folder +'/'
+    generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)
