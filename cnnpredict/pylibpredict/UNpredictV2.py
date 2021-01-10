@@ -177,7 +177,10 @@ def unwrap_k(folder):
     # kdata = np.matrix.round(45*kdata)
 
     # wraplow = resize(wraplow, W, H)  # To be continued
-    wraphigh = 5.8*(np.load(folder + '/unwrap1.npy'))
+    wraphigh = (np.load(folder + '/unwrap1.npy'))
+    wraphigh = wraphigh - np.min(wraphigh)
+    wraphigh = wraphigh/ np.max(wraphigh)
+    wraphigh = wraphigh*2*PI
     print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     print('kdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
     # wraphigh = normalize_image(wraphigh)
@@ -371,10 +374,10 @@ folder = '/home/samir/Desktop/blender/pycode/stitch/render'
 bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
-# Lmodel = load_L_model()
-# Hmodel = load_H_model()
+Lmodel = load_L_model()
+Hmodel = load_H_model()
 
-for i in range(len(os.listdir(bfolder))):
+for i in range(len(os.listdir(bfolder))-4):
     # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
@@ -382,11 +385,11 @@ for i in range(len(os.listdir(bfolder))):
     # mask(folder+str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
-    # nnHprocess(folder + str(i)+'/')
-    # nnLprocess(folder + str(i)+'/')
+    nnHprocess(folder + str(i)+'/')
+    nnLprocess(folder + str(i)+'/')
     unwrap_k(folder + str(i)+'/')
     newDepth(folder+ str(i), 400)
-    folder=folder +'/'
+    # folder=folder +'/'
     generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 

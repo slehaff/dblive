@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
+import os
 
 H=160
 W= 160
@@ -29,27 +30,38 @@ def makemonohigh(folder):
     monohigh = make_grayscale(colorhigh)
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
-
-folder1 = '/home/samir/Desktop/blender/pycode/160planes/render2'
-folder2 = '/home/samir/Desktop/blender/pycode/160planes/render12'
+folder = '/home/samir/Desktop/blender/pycode/stitchfiles/'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
+folder1 = '/home/samir/Desktop/blender/pycode/stitch/render'
+folder2 = '/home/samir/Desktop/blender/pycode/stitch/render'
 
 monohigh = np.zeros((H, W), dtype=np.float64)
 
-high = folder2 + '/cnnwrap1.png'
-colorhigh = cv2.imread(high, 1)
-colorhigh = resize(colorhigh, W, H)
-monohigh1 = make_grayscale(colorhigh)
+for i in range(len(os.listdir(bfolder))):
+    my_folder = folder+'neural/'  +'n'+ str(i)+'/'
+    print(my_folder)
+    if not os.path.exists(my_folder):
+        print('absent!')
+        os.makedirs(my_folder)
 
-high = folder1 + '/cnnwrap1.png'
-colorhigh = cv2.imread(high, 1)
-colorhigh = resize(colorhigh, W, H)
-monohigh2 = make_grayscale(colorhigh)
+    high = folder2 + str(i)+ '/unwrap1.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh1 = make_grayscale(colorhigh)
+
+    high = folder1 +str(i)+  '/nnkdata.png'
+    colorhigh = cv2.imread(high, 1)
+    colorhigh = resize(colorhigh, W, H)
+    monohigh2 = make_grayscale(colorhigh)
 
 
-x = range(160)
+    x = range(160)
 
-for i in range(0,160,20):
-    plt.plot(x, monohigh1[:,i],
-    x, monohigh2[:,i])
-    plt.ylabel(str(i)) 
-    plt.show()
+    for j in range(0,160,20):
+        fig = plt.figure()
+        plt.plot(x, monohigh1[:,j],
+        x, monohigh2[:,j])
+        plt.ylabel(str(j))
+        fig.savefig(my_folder+ 'plot'+str(j)+'.png')
+        plt.close(fig) 
+        # plt.show()
