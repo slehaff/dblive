@@ -30,10 +30,10 @@ def makemonohigh(folder):
     monohigh = make_grayscale(colorhigh)
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
-folder = '/home/samir/Desktop/blender/pycode/stitchfiles/'
-bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
-folder1 = '/home/samir/Desktop/blender/pycode/stitch/render'
-folder2 = '/home/samir/Desktop/blender/pycode/stitch/render'
+folder = '/home/samir/Desktop/blender/pycode/stitch2files/'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
+folder1 = '/home/samir/Desktop/blender/pycode/stitch2/render'
+folder2 = '/home/samir/Desktop/blender/pycode/stitch2/render'
 
 monohigh = np.zeros((H, W), dtype=np.float64)
 

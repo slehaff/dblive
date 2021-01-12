@@ -31,8 +31,8 @@ PI = np.pi
 
 
 
-high_freq = 13
-low_freq = 1
+high_freq = 14
+low_freq = .7
 H = 160
 W = 160
 
@@ -370,14 +370,14 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/stitch/render'
-bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
+folder = '/home/samir/Desktop/blender/pycode/stitch2/render'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
-for i in range(len(os.listdir(bfolder))-4):
+for i in range(len(os.listdir(bfolder))):
     # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
