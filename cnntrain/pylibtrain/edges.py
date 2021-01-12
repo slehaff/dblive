@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 from matplotlib import pyplot as plt
 
-bfolder = '/home/samir/Desktop/blender/pycode/stitch/render0/'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch2/render0/'
 
 
 img1 = cv.imread(bfolder + 'kdata.png',0)

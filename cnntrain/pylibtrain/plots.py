@@ -57,7 +57,7 @@ for i in range(len(os.listdir(bfolder))):
 
     x = range(160)
 
-    for j in range(0,160,20):
+    for j in range(0,160,10):
         fig = plt.figure()
         plt.plot(x, monohigh1[:,j],
         x, monohigh2[:,j])
