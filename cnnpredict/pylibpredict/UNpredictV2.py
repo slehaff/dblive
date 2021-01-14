@@ -172,8 +172,8 @@ def unwrap_k(folder):
     kdata = np.zeros((H, W), dtype=np.float64)
     wraphigh = np.zeros((H, W), dtype=np.float64)
     unwrapdata = np.zeros((H, W), dtype=np.float64)
-    kdata = np.load(folder + '/nnkdata.npy')
-    kdata = np.round(37.5*kdata)
+    kdata = np.load(folder + '/nnkdata.npy')  # Use a factor of 37.5 when using nnkdata!
+    kdata = np.round(37.5*kdata)  # Use a factor of 37.5 when using nnkdata!
     # kdata = np.matrix.round(45*kdata)
 
     # wraplow = resize(wraplow, W, H)  # To be continued
@@ -182,12 +182,13 @@ def unwrap_k(folder):
     wraphigh = wraphigh/ np.max(wraphigh)
     wraphigh = wraphigh*2*PI
     print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
-    print('kdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
+    print('nnkdatarange=', np.ptp(kdata), np.max(kdata), np.min(kdata) )
     # wraphigh = normalize_image(wraphigh)
     # wraphigh = 2*PI*wraphigh
     # print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
     unwrapdata = np.add(wraphigh, np.multiply(2*PI,kdata) )
     print('kdata:', kdata[::40, ::40])
+    print('nnunwrange=', np.ptp(unwrapdata), np.max(unwrapdata), np.min(unwrapdata) )
     wr_save = folder + '/nnkunwrap.npy'
     np.save(wr_save, unwrapdata, allow_pickle=False)
     cv2.imwrite(folder + '/nnkunwrap.png', 3.0*unwrapdata)
@@ -242,6 +243,7 @@ def newDepth(folder, basecount):
     basefile = '/home/samir/Desktop/blender/pycode/400newplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'/unwrap.npy' )
+    unwrap = unwrap + 10
     # print('DBase:', np.amax(DBase), np.amin(DBase))
     # print('unwrap:', np.amax(unwrap), np.amin(unwrap))
     depth = np.zeros((H, W), dtype=np.float64)
@@ -273,12 +275,79 @@ def newDepth(folder, basecount):
             # print(s)
     # print('depth:', np.amax(depth), np.amin(depth))
     im_depth = depth# np.max(unwrapdata)*255)
+    print('nndepthrange=', np.ptp(depth), np.max(depth), np.min(depth) )
     cv2.imwrite(folder + '/nndepth.png', im_depth)
     print(folder+'/nndepth.png')
     np.save(folder+'/nndepth.npy' ,im_depth , allow_pickle=False)
 
 
+
+def nngenerate_pointcloud(rgb_file, mask_file,depth_file,ply_file):
+    """
+    Generate a colored point cloud in PLY format from a color and a depth image.
     
+    Input:
+    rgb_file -- filename of color image
+    depth_file -- filename of depth image
+    ply_file -- filename of ply file
+    
+    """
+    rgb = Image.open(rgb_file)
+    # depth = Image.open(depth_file)
+    # depth = Image.open(depth_file).convert('I')
+    depth = np.load(depth_file )
+    mask = Image.open(mask_file).convert('I')
+
+    # if rgb.size != depth.size:
+    #     raise Exception("Color and depth image do not have  same resolution.")
+    # if rgb.mode != "RGB":
+    #     raise Exception("Color image is not in RGB format")
+    # if depth.mode != "I":
+    #     raise Exception("Depth image is not in intensity format")
+
+
+    points = []    
+    for v in range(rgb.size[1]):
+        for u in range(rgb.size[0]):
+
+            color =   rgb.getpixel((v,u))
+            # Z = depth.getpixel((u,v)) / scalingFactor
+            # if Z==0: continue
+            # X = (u - centerX) * Z / focalLength
+            # Y = (v - centerY) * Z / focalLength
+            if (mask.getpixel((v,u))<55):
+                # Z = depth.getpixel((u, v))
+                Z = depth[u,v]
+                if Z < 0:
+                    Z = 0 
+                else:
+                    if Z> 80:
+                        Z = 80
+                if Z == 0: continue
+                Y = .196 * (v-80) *  Z/80 #.196 = tan(FOV/2)
+                X = .196 * (u-80) *  Z/80
+                if (u==80 and v ==80):
+                    print('80:z=', Z, X, Y)
+                else:
+                   if (u==102 and v ==82):
+                        print('82:z=', Z, X, Y) 
+                points.append("%f %f %f %d %d %d 0\n"%(X,Y,Z,color[0],color[1],color[2]))
+    file = open(ply_file,"w")
+    file.write('''ply
+format ascii 1.0
+element vertex %d
+property float x
+property float y
+property float z
+property uchar red
+property uchar green
+property uchar blue
+property uchar alpha
+end_header
+%s
+'''%(len(points),"".join(points)))
+    file.close()
+
 
 
 def generate_pointcloud(rgb_file, mask_file,depth_file,ply_file):
@@ -294,7 +363,8 @@ def generate_pointcloud(rgb_file, mask_file,depth_file,ply_file):
     print(rgb_file)
     rgb = Image.open(rgb_file)
     # depth = Image.open(depth_file)
-    depth = Image.open(depth_file).convert('I')
+    # depth = Image.open(depth_file).convert('I')
+    depth = np.load(depth_file)
     mask = Image.open(mask_file).convert('I')
 
     # if rgb.size != depth.size:
@@ -370,8 +440,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/stitch2/render'
-bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
+folder = '/home/samir/Desktop/blender/pycode/Cstitch/render'
+bfolder = '/home/samir/Desktop/blender/pycode/Cstitch/'
 # folder = '/home/samir/Desktop/blender/pycode/headscans/render'
 # bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
 Lmodel = load_L_model()
@@ -390,7 +460,7 @@ for i in range(len(os.listdir(bfolder))):
     unwrap_k(folder + str(i)+'/')
     newDepth(folder+ str(i), 400)
     # folder=folder +'/'
-    generate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.png', folder+str(i) +'/pointcl-nndepth.ply')
+    nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)
