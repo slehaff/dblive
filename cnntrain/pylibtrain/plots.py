@@ -1,5 +1,5 @@
 # This module plots a row in 2 different files for comparing fringe and wral patterns between different files
-
+# The module is set manually to produce neural plots in "neural" folder or analytic plots in "analytic" folder
 
 import matplotlib.pyplot as plt
 import cv2
@@ -43,10 +43,14 @@ def makemonohigh(folder):
     monohigh = make_grayscale(colorhigh)
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
-folder = '/home/samir/Desktop/blender/pycode/stitch2files/'
-bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
-folder1 = '/home/samir/Desktop/blender/pycode/stitch2/render'
-folder2 = '/home/samir/Desktop/blender/pycode/stitch2/render'
+
+
+
+
+folder = '/home/samir/Desktop/blender/pycode/stitch3files/'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch3/'
+folder1 = '/home/samir/Desktop/blender/pycode/stitch3/render'
+folder2 = '/home/samir/Desktop/blender/pycode/stitch3/render'
 
 monohigh = np.zeros((H, W), dtype=np.float64)
 
@@ -70,7 +74,7 @@ for i in range(len(os.listdir(bfolder))):
 
     x = range(160)
 
-    for j in range(0,160,10):
+    for j in range(0,160,20):
         fig = plt.figure()
         plt.plot(x, monohigh1[:,j],
         x, monohigh2[:,j])
@@ -91,5 +95,7 @@ def repairK(wrapfile, kfile, krepfile):
 
     for j in range(160):
         for i in range(160):
-            if wdata[i,j] < lowthresh :
-                lowthresh == True
+            if ((wdata[i,j] - wdata[i-1,j]<0) and (wdata[i+1,j] - wdata[i,j]>0)):  #bottom spike
+                kdata[i,j] = kdata[i-1,j]+ 7
+
+

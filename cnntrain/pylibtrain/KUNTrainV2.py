@@ -23,8 +23,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
+EPOCHS = 5
+inputFolder = '/home/samir/Desktop/blender/pycode/stitch/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -233,13 +233,13 @@ model = UModel
 
 
 def load_model():
-    model = keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5')
+    model = tf.keras.models.load_model(
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -296,16 +296,16 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
+myfile = inputFolder+'render' + str(1)+'/unwrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 90, 1):
+for i in range(0, 10, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
@@ -317,8 +317,9 @@ for i in range(0, 90, 1):
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
+    # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-KUN-100-V2.png',
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-800-test-KUN-stitch-V3.png',
             (1.0*combotot).astype(np.uint8))

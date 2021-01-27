@@ -23,8 +23,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 200
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -319,6 +319,6 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-WUN-200-V2.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNetest02-400-WUN-100-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNetest02-400-WUN-100-V2.png',
             (1.0*combotot).astype(np.uint8))

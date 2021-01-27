@@ -72,11 +72,9 @@ def load_H_model():
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
-
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
     return(model)
-
 
 def makemonohigh(folder):
     high = folder + 'high.png'
@@ -166,14 +164,36 @@ def nnLprocess(folder):
 
 
     return  #(predicted_img[0], predicted_img[1])
-  
+
+
+
+def repairK(wrapfile, kfile, krepfile):
+    high = wrapfile
+    wdata = cv2.imread(high, 1)
+    krepdata = np.zeros((H, W), dtype=np.float)
+    k = kfile
+    kdata = cv2.imread(k, 1)
+
+    for j in range(1,160):
+        for i in range(1,160):
+            if ((wdata[i,j][0] - wdata[i-1,j][0])<0):
+                print('minus')
+
+                if ((wdata[i+1,j][0] - wdata[i,j][0])>0):  #bottom spike
+                    krepdata[i,j] = krepdata[i-1,j]+ 7
+                    print('krepdata:', krepdata)
+    cv2.imwrite(krepfile, 3.0*krepdata)
+
 
 def unwrap_k(folder):
     kdata = np.zeros((H, W), dtype=np.float64)
     wraphigh = np.zeros((H, W), dtype=np.float64)
     unwrapdata = np.zeros((H, W), dtype=np.float64)
     kdata = np.load(folder + '/nnkdata.npy')  # Use a factor of 37.5 when using nnkdata!
+
     kdata = np.round(37.5*kdata)  # Use a factor of 37.5 when using nnkdata!
+    # kdata = kdata/4
+    # kdata = kdata*4
     # kdata = np.matrix.round(45*kdata)
 
     # wraplow = resize(wraplow, W, H)  # To be continued
@@ -242,7 +262,7 @@ def makeDepth( folder, basecount):
 def newDepth(folder, basecount):
     basefile = '/home/samir/Desktop/blender/pycode/400newplanes/DDbase.npy'
     DBase = np.load(basefile)
-    unwrap = np.load(folder+'/unwrap.npy' )
+    unwrap = np.load(folder+'/nnkunwrap.npy' )
     unwrap = unwrap + 10
     # print('DBase:', np.amax(DBase), np.amin(DBase))
     # print('unwrap:', np.amax(unwrap), np.amin(unwrap))
@@ -440,10 +460,10 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/Cstitch/render'
-bfolder = '/home/samir/Desktop/blender/pycode/Cstitch/'
-# folder = '/home/samir/Desktop/blender/pycode/headscans/render'
-# bfolder = '/home/samir/Desktop/blender/pycode/headscans/'
+folder = '/home/samir/Desktop/blender/pycode/stitch2/render'
+bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
+
+
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
@@ -455,12 +475,15 @@ for i in range(len(os.listdir(bfolder))):
     # mask(folder+str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
+
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
     unwrap_k(folder + str(i)+'/')
     newDepth(folder+ str(i), 400)
-    # folder=folder +'/'
     nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
+
+    # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
+
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)
