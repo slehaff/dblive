@@ -17,15 +17,14 @@ from PIL import Image
 
 from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add, concatenate
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
-from tensorflow.keras.utils import plot_model
 
 H = 160
 W = 160
 
-EPOCHS = 5
-inputFolder = '/home/samir/Desktop/blender/pycode/stitch/'
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -168,7 +167,8 @@ print(A29.shape)
 ############################################# Decode ###############################################
 
 A30 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A29)
-A31 = Conv2D(512,(3,3), padding='same')(A30)
+C1  = concatenate([A30,A24], axis = 3)
+A31 = Conv2D(512,(3,3), padding='same')(C1)
 A32 = Activation('relu')(A31)
 A33 = add([A24, A32])
 A34 = Conv2D(512,(3,3), padding='same')(A33)
@@ -176,7 +176,8 @@ A35 = Activation('relu')(A34)
 print(A35.shape)
 
 A36 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A35)
-A37 = Conv2D(256,(3,3), padding='same')(A36)
+C2  = concatenate([A36,A19], axis = 3)
+A37 = Conv2D(256,(3,3), padding='same')(C2)
 A38 = Activation('relu')(A37)
 A39 = add([A19, A38])
 A40 = Conv2D(256,(3,3), padding='same')(A39)
@@ -184,7 +185,8 @@ A41 = Activation('relu')(A40)
 print(A41.shape)
 
 A42 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A41)
-A43 = Conv2D(128,(3,3), padding='same')(A42)
+C3  = concatenate([A42,A14], axis = 3)
+A43 = Conv2D(128,(3,3), padding='same')(C3)
 A44 = Activation('relu')(A43)
 A45 = add([A14, A44])
 A46 = Conv2D(128,(3,3), padding='same')(A45)
@@ -192,7 +194,8 @@ A47 = Activation('relu')(A46)
 print(A47.shape)
 
 A48 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A47)
-A49 = Conv2D(64,(3,3), padding='same')(A48)
+C4  = concatenate([A48,A9], axis = 3)
+A49 = Conv2D(64,(3,3), padding='same')(C4)
 A50 = Activation('relu')(A49)
 A51 = add([A9, A50])
 A52 = Conv2D(64,(3,3), padding='same')(A51)
@@ -200,7 +203,8 @@ A53 = Activation('relu')(A52)
 print(A53.shape)
 
 A54 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A53)
-A55 = Conv2D(32,(3,3), padding='same')(A54)
+C5  = concatenate([A54,A4], axis = 3)
+A55 = Conv2D(32,(3,3), padding='same')(C5)
 A56 = Activation('relu')(A55)
 A57 = add([A4, A56])
 A58 = Conv2D(32,(3,3), padding='same')(A57)
@@ -235,18 +239,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V4.h5')
     model.summary()
     return(model)
 
 
-model = load_model()
-
-
-# tf.keras.utils.plot_model(
-#    model, to_file='model.png', show_shapes=False, show_dtype=False,
-#     show_layer_names=True, rankdir='TB', expand_nested=False, dpi=96
-# )
+# model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -309,7 +307,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 10, 1):
+for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
@@ -327,6 +325,6 @@ for i in range(0, 10, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-stitch-V3.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-800-test-KUN-stitch-V5.png',
             (1.0*combotot).astype(np.uint8))
