@@ -114,7 +114,7 @@ to_png_array(inputFolder + '/render', 'im_wrap1' , hwrap_images, IMAGECOUNT) #kd
 # Expand the image dimension to conform with the shape required by tensorflow.keras and tensorflow, inputshape=(..., h, w, nchannels).
 fringe_images = np.expand_dims(fringe_images, -1)
 hwrap_images = np.expand_dims(hwrap_images, -1)
-print("input shape: {}".format(fringe_images.shape))
+print("input shape after expand: {}".format(fringe_images.shape))
 # print("output shape: {}".format(nom_images.shape))
 print(len(fringe_images))
 

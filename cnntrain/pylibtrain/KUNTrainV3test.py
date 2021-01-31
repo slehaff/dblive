@@ -16,17 +16,17 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 from tensorflow.python.keras.layers import Layer, InputSpec
-from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Reshape
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add, concatenate
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 
 H = 160
 W = 160
 
-EPOCHS = 10
+EPOCHS = 5
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 IMAGECOUNT = len(os.listdir(inputFolder))
-
+nclasses = 20
 
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -212,7 +212,9 @@ A59 = Activation('relu')(A58)
 print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
-
+outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
+outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
+outputImage = Activation('softmax')(outputImage)
 
 UModel = Model(inputImage, outputImage)
 UModel.summary()
@@ -284,7 +286,11 @@ plot()
 
 
 def combImages(i1, i2, i3):
-    new_img = np.concatenate((i1, i2, i3), axis=1)
+    print(np.shape(i1))
+    print(np.shape(i2))
+    print(np.shape(i3))
+    
+    # new_img = np.concatenate((i1, i2, i3), axis=1)
     return(new_img)
 
 
