@@ -24,16 +24,68 @@ def addtext(filename, text):
 def denstext(filename):
     print(filename)
     img = cv2.imread(filename)
-    img = make_grayscale(img)
+    # img = make_grayscale(img)
     print(img.size)
     for u in range(0,W,5):
         for v in range(0,H,5):
             sum=0
             for i in range(5):
                 for j in range(5):
-                    sum= sum+img[u+i,v+j]
+                    sum= sum+img[u+i,v+j][0]
             sum= np.round(sum/(25*9))
             print(u,v,sum)
+
+def coldens(filename):
+    colors=[[20,20,20],
+            [20,60,60],
+            [60,20,60],
+            [60,60,20],
+            [40,60,60],
+            [60,40,60],
+            [60,60,40],
+            [60,50,50],
+            [50,60,50],
+            [50,50,60],            
+            [60,60,60],
+            [70,70,70],
+            [80,80,80],
+            [90,90,90],
+            [100,100,100],
+            [110,110,110]
+    ]
+    print(filename)
+    img = np.zeros((H, W), dtype=np.float64)
+    img = cv2.imread(filename)
+    print(np.max(img), np.min(img))
+    img = img/np.max(img)*245
+    # img = make_grayscale(img)
+    print(img.size)
+    for u in range(0,W):
+        for v in range(0,H):
+            col=int(np.round(img[u,v][0]/16))
+            img[u,v]=colors[col]
+    savename = filename[:-4]+'col.png'
+    print(savename)
+    cv2.imwrite(savename,img)
+
+
+def densclass(filename):
+    densclass = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+    print(filename)
+    img = np.zeros((H, W), dtype=np.float64)
+    img = cv2.imread(filename)
+    denscl = np.zeros((H,W), dtype= np.int16)
+    img = img/np.max(img)*245
+    print(img.size)
+    # denscl = int(np.round(img/18))
+    for u in range(0,W):
+        for v in range(0,H):
+            dcl=int(np.round(img[u,v][0]/16))
+            denscl[u,v]=densclass[dcl]
+    savename = filename[:-4]+'class.png'
+    print(savename)
+    print(np.max(denscl))
+    cv2.imwrite(savename,denscl)
 
 def resize(img, w,h):
     print(img.shape)
@@ -98,7 +150,11 @@ def myplot():
 
 folder1 = '/home/samir/Desktop/blender/pycode/stitch/render0/kdata.png'
 
-denstext(folder1)
+# denstext(folder1)
+# coldens(folder1)
+densclass(folder1)
+
+
 
 def repairK(wrapfile, kfile, krepfile):
     high = folder2 + str(i)+ wrapfile

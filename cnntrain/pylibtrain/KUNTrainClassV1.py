@@ -22,11 +22,12 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 
 H = 160
 W = 160
+N = 18 # Number of classes corresponds to hfwrap periods
 
 EPOCHS = 5
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
-IMAGECOUNT = len(os.listdir(inputFolder))
-nclasses = 20
+IMAGECOUNT = 20#len(os.listdir(inputFolder))
+nclasses = 18 # Still number of classes
 
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -79,6 +80,32 @@ def to_png_array(folder_path, filename, array, file_count):
     return   
 
 
+def to_kdens_class_array(folder_path, filename, array, file_count):
+    for i in range(file_count):
+        print('count:', i)
+        myfile = folder_path + str(i)+'/'+ filename + '.png'
+        img = cv2.imread(myfile).astype(np.float32)
+        img = resize(img, 160, 160)
+        print('img:', img.shape)
+        img = normalize_image255(img)
+        inp_img = make_grayscale(img)
+
+        print(filename)
+
+        denscl = np.zeros((H,W,N), dtype= np.int16)
+        print(img.size)
+        for u in range(0,W):
+            for v in range(0,H):
+                dcl=int(np.round(img[u,v][0]/N))
+                denscl[u,v,dcl]=1
+        # savename = filename[:-4]+'class.png'
+        # print(savename)
+        # cv2.imwrite(savename,img)
+
+        array.append(denscl)
+    return  
+
+
 def to_new_npy_array(folder_path, filename, array, file_count):
     for i in range(0, file_count, 1):
         myfile = folder_path + str(i)+str(i)+'/'+ filename +'.npy'
@@ -99,12 +126,38 @@ def to_npy_array(folder_path, array, file_count):
     return
 
 
+
+def densclass(filename):
+    densclass = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+    print(filename)
+    img = np.zeros((H, W), dtype=np.float64)
+    img = cv2.imread(filename)
+    denscl = np.zeros((H,W), dtype= np.int16)
+    print(img.size)
+    for u in range(0,W):
+        for v in range(0,H):
+            dcl=int(np.round(img[u,v][0]/N))
+            denscl[u,v]=densclass[dcl]
+    savename = filename[:-4]+'class.png'
+    print(savename)
+    cv2.imwrite(savename,img)
+
+
+def undensclass(denscl):
+
+    img = np.zeros((H, W), dtype=np.float64)
+    for u in range(0,W):
+        for v in range(0,H):
+            img[u,v]=denscl[u,v][2]/nclasses*255
+    return(img)
+
+
 # Load and pre-process the training data
 wrap_images = []
 k_images = []
 #========================================= Use with dblive folder structure ===============================
 to_png_array(inputFolder+'render', 'nnkdata', wrap_images, IMAGECOUNT)
-to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
+to_kdens_class_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -114,6 +167,7 @@ to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
 wrap_images = np.expand_dims(wrap_images, -1)
 k_images = np.expand_dims(k_images, -1)
+print('k_images shape:', k_images.shape)
 print("input shape: {}".format(wrap_images.shape))
 # print("output shape: {}".format(nom_images.shape))
 print(len(wrap_images))
@@ -213,8 +267,12 @@ print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
 outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
-outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
+# outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
+outputImage = Dense(nclasses)(outputImage)
 outputImage = Activation('softmax')(outputImage)
+# outputImage[2][0] = tf.math.argmax(outputImage[2])
+# print(tf.math.argmax(outputImage, 2))
+print('out shape:',outputImage.shape)
 
 UModel = Model(inputImage, outputImage)
 UModel.summary()
@@ -223,9 +281,9 @@ UModel.summary()
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer='adam', loss='mean_squared_error',
-                  metrics=['mse'])
+    # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(optimizer='adam', loss = tf.keras.losses.CategoricalCrossentropy(),
+                  metrics=['accuracy'])
     model.summary()
     return(model)
 
@@ -279,7 +337,7 @@ def plot():
     plt.ylabel('loss')
     plt.legend(['Training loss', 'Validation loss'], loc='upper right')
     plt.show()
-    plt.savefig('trainingvalidationlossgx.png')
+    # plt.savefig('trainingvalidationlossgx.png')
 
 
 plot()
@@ -289,8 +347,8 @@ def combImages(i1, i2, i3):
     print(np.shape(i1))
     print(np.shape(i2))
     print(np.shape(i3))
-    
-    # new_img = np.concatenate((i1, i2, i3), axis=1)
+    # i2 = undensclass(i2)
+    new_img = np.concatenate((i1, i1, i3), axis=1)
     return(new_img)
 
 
@@ -307,16 +365,16 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/nnkdata.png'
+myfile = inputFolder+'render' + str(1)+'/unwrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 90, 1):
+for i in range(0, 10, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/nnkdata.png'
+    myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
@@ -330,6 +388,7 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
+    # combo[1]= undensclass(combo[1])
     combotot = np.concatenate((combotot, combo), axis=0)
 # model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
 cv2.imwrite('validate/'+'UNet02-800-test-KUN-test-V5.png',

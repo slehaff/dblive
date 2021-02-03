@@ -23,7 +23,7 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 100
+EPOCHS = 10
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
@@ -325,6 +325,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
 cv2.imwrite('validate/'+'UNet02-800-test-KUN-stitch-V5.png',
             (1.0*combotot).astype(np.uint8))
