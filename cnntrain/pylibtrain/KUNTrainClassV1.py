@@ -15,7 +15,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from tensorflow.python.keras.layers import Layer, InputSpec
+from tensorflow.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Reshape
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add, concatenate
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
@@ -92,12 +92,12 @@ def to_kdens_class_array(folder_path, filename, array, file_count):
 
         print(filename)
 
-        denscl = np.zeros((H,W,N), dtype= np.int16)
+        denscl = np.zeros((H,W,1), dtype= np.int16)
         print(img.size)
         for u in range(0,W):
             for v in range(0,H):
                 dcl=int(np.round(img[u,v][0]/N))
-                denscl[u,v,dcl]=1
+                denscl[u,v,0]=dcl
         # savename = filename[:-4]+'class.png'
         # print(savename)
         # cv2.imwrite(savename,img)
@@ -268,7 +268,7 @@ print(A59.shape)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
 outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
 # outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
-outputImage = Dense(nclasses)(outputImage)
+outputImage = Dense(1)(outputImage)
 outputImage = Activation('softmax')(outputImage)
 # outputImage[2][0] = tf.math.argmax(outputImage[2])
 # print(tf.math.argmax(outputImage, 2))
