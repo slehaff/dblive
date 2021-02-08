@@ -26,7 +26,7 @@ N = 18 # Number of classes corresponds to hfwrap periods
 
 EPOCHS = 5
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
-IMAGECOUNT = 20#len(os.listdir(inputFolder))
+IMAGECOUNT = 50 #len(os.listdir(inputFolder))
 nclasses = 18 # Still number of classes
 
 def make_grayscale(img):
@@ -50,6 +50,7 @@ def normalize_image255(img):
 
 def normalize_image(img):
     # Normalizes the input image to range (0, 1) for visualization
+    print(np.max(img), np.min(img))
     img = img - np.min(img)
     img = img/np.max(img)
     return img
@@ -87,17 +88,21 @@ def to_kdens_class_array(folder_path, filename, array, file_count):
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
-        img = normalize_image255(img)
-        inp_img = make_grayscale(img)
+        img = normalize_image(img)
+        print(np.max(img))
+        inp_img = (N-1)*make_grayscale(img)
+        print(np.max(inp_img))
 
-        print(filename)
+        print(folder_path)
 
         denscl = np.zeros((H,W,1), dtype= np.int16)
         print(img.size)
         for u in range(0,W):
             for v in range(0,H):
-                dcl=int(np.round(img[u,v][0]/N))
+                dcl=int(np.round(inp_img[u,v]))
                 denscl[u,v,0]=dcl
+                # if v==0:
+                #     print(dcl)
         # savename = filename[:-4]+'class.png'
         # print(savename)
         # cv2.imwrite(savename,img)
@@ -156,7 +161,7 @@ def undensclass(denscl):
 wrap_images = []
 k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'nnkdata', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
 to_kdens_class_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
@@ -267,12 +272,12 @@ print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
 outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
-# outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
-outputImage = Dense(1)(outputImage)
-outputImage = Activation('softmax')(outputImage)
 # outputImage[2][0] = tf.math.argmax(outputImage[2])
+# outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
+outputImage = Dense(N, activation= 'softmax' )(outputImage)
+outputImage = Activation('softmax')(outputImage)
 # print(tf.math.argmax(outputImage, 2))
-print('out shape:',outputImage.shape)
+print('out2 shape:',outputImage.shape)
 
 UModel = Model(inputImage, outputImage)
 UModel.summary()
@@ -282,7 +287,7 @@ UModel.summary()
 def compile_model(model):
     # model = Model(input_image, output_image)
     # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer='adam', loss = tf.keras.losses.CategoricalCrossentropy(),
+    model.compile(optimizer='adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(),
                   metrics=['accuracy'])
     model.summary()
     return(model)

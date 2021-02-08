@@ -282,6 +282,16 @@ def plot():
 
 plot()
 
+def shiftzright(img):
+    for u in range(W):
+        for v in range(H):
+            a = int(img[u,v])
+            a = a >>1
+            a = a <<1
+            img[u,v] = a
+
+    return(img)
+
 
 def combImages(i1, i2, i3):
     new_img = np.concatenate((i1, i2, i3), axis=1)
@@ -291,11 +301,14 @@ def combImages(i1, i2, i3):
 def DB_predict(i, x, y):
     predicted_img = model.predict(np.array([np.expand_dims(x, -1)]))
     predicted_img = predicted_img.squeeze()
+    predicted_img = 255*predicted_img
+    predicted_img = shiftzright(predicted_img)
+    
     # cv2.imwrite('validate/'+str(i)+'filteredSync.png',
     #             (255.0*predicted_img).astype(np.uint8))
     # cv2.imwrite('validate/'+str(i)+'input.png',
     #             (255.0*x).astype(np.uint8))
-    combo = combImages(255.0*x, 255.0*predicted_img, 255.0*y)
+    combo = combImages(255.0*x, 1.0*predicted_img, 255.0*y)
     cv2.imwrite('validate/test/'+str(i)+'combo.png', (1.0*combo).astype(np.uint8))
     return(combo)
 
@@ -326,5 +339,5 @@ for i in range(0, 90, 1):
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
 # model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-stitch-V5.png',
+cv2.imwrite('validate/'+'UNet02-800-test-KUN-transf>>-V5.png',
             (1.0*combotot).astype(np.uint8))
