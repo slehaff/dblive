@@ -19,14 +19,15 @@ from tensorflow.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Reshape
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add, concatenate
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
+from tensorflow.keras.metrics import MeanIoU
 
 H = 160
 W = 160
 N = 18 # Number of classes corresponds to hfwrap periods
 
-EPOCHS = 5
+EPOCHS = 50
 inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
-IMAGECOUNT = 50 #len(os.listdir(inputFolder))
+IMAGECOUNT = 100 #len(os.listdir(inputFolder))
 nclasses = 18 # Still number of classes
 
 def make_grayscale(img):
@@ -108,6 +109,7 @@ def to_kdens_class_array(folder_path, filename, array, file_count):
         # cv2.imwrite(savename,img)
 
         array.append(denscl)
+        print('kdens shape:', denscl.shape, denscl[159,159,0])
     return  
 
 
@@ -272,10 +274,12 @@ print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
 outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
+outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1), activation= 'softmax')(outputImage)
+
 # outputImage[2][0] = tf.math.argmax(outputImage[2])
 # outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
-outputImage = Dense(N, activation= 'softmax' )(outputImage)
-outputImage = Activation('softmax')(outputImage)
+# outputImage = Dense(N, activation= 'softmax' )(outputImage)
+# outputImage = Activation('softmax')(outputImage)
 # print(tf.math.argmax(outputImage, 2))
 print('out2 shape:',outputImage.shape)
 
@@ -288,7 +292,7 @@ def compile_model(model):
     # model = Model(input_image, output_image)
     # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(),
-                  metrics=['accuracy'])
+                  metrics=['sparse_categorical_accuracy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
     model.summary()
     return(model)
 
