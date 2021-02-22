@@ -10,6 +10,6 @@ Destination folder is: folder = '/home/samir/Desktop/blender/pycode/inputscans/r
 ssh pi@danwand.local
 
 Training is a major task for dblive, Folder format for valid input is:
-UNTrain.py is the main training input py, this is a Unet trainer with an identical neural net for processing:
+UNTrain.py is the main training input py, this is a Unet trainer with two identical neural nets for processing:
     HFringe to HWrapped
     HWrapped to Kvalue file
