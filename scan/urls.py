@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
 
     path('upload', views.pic),
+    path('peter', views.sendpic),
 
 ]
