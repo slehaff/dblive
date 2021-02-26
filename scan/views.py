@@ -103,7 +103,6 @@ def pic(request):
             save_uploaded_file(request.FILES['Pic1'], f1)
             save_uploaded_file(request.FILES['Pic2'], f2)
             save_uploaded_file(request.FILES['Pic3'], f3)
-            # save_uploaded_file(request.FILES['Pic4'], '/home/samir/dblive/scan/static/scan_image_folder/low.png')
             b1 = cv2.imread(f1, 0).astype(np.float32)
             b2 = cv2.imread(f2, 1).astype(np.float32)
             b3 = cv2.imread(f3, 0).astype(np.float32)
