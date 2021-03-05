@@ -17,7 +17,7 @@ def loopforever():
         print(len(myglobals.inque), b)
         b+=1
         time.sleep(20)
-        if (len(myglobals.inque)>100):
+        if (len(myglobals.inque)>40):
             for i in range(80):
                 f = folder + str(i)
                 os.mkdir(f)

@@ -4,7 +4,7 @@ from PIL import Image
 
 width = 4096
 height = 2732
-hfperiods = 120
+hfperiods = 160
 periods = 6
 
 

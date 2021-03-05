@@ -14,6 +14,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
+import keras
 
 from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
@@ -115,7 +116,7 @@ to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 wrap_images = np.expand_dims(wrap_images, -1)
 k_images = np.expand_dims(k_images, -1)
 print("input shape: {}".format(wrap_images.shape))
-# print("output shape: {}".format(nom_images.shape))
+print("output shape: {}".format(k_images.shape))
 print(len(wrap_images))
 
 

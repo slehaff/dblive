@@ -4,8 +4,7 @@ import numpy as np
 import os
 import cv2
 import pandas as pd
-
-
+import keras_preprocessing
 import tensorflow.keras
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2D
@@ -96,20 +95,20 @@ def to_kdens_class_array(folder_path, filename, array, file_count):
 
         print(folder_path)
 
-        denscl = np.zeros((H,W,1), dtype= np.int16)
+        denscl = np.zeros((H,W), dtype= np.int16)
         print(img.size)
         for u in range(0,W):
             for v in range(0,H):
                 dcl=int(np.round(inp_img[u,v]))
-                denscl[u,v,0]=dcl
+                denscl[u,v]=dcl
                 # if v==0:
                 #     print(dcl)
-        # savename = filename[:-4]+'class.png'
-        # print(savename)
-        # cv2.imwrite(savename,img)
+        savename =folder_path + str(i)+'/'+ filename[:-4]+'class.png'
+        print(savename)
+        cv2.imwrite(savename,img)
 
         array.append(denscl)
-        print('kdens shape:', denscl.shape, denscl[159,159,0])
+        print('kdens shape:', denscl.shape, denscl[159,159])
     return  
 
 
