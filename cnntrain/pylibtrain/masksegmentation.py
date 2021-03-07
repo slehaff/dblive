@@ -12,7 +12,7 @@ SM_FRAMEWORK=tf.keras
 import cv2
 import shutil
 import numpy as np
-
+classes = 18
 H = 160
 W = 160
 
@@ -24,7 +24,7 @@ W = 160
 infolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 wrapfolder ='/home/samir/Desktop/blender/pycode/segmentation/wrap/'
 kfolder ='/home/samir/Desktop/blender/pycode/segmentation/k/'
-
+mfolder ='/home/samir/Desktop/blender/pycode/segmentation/'
 ######################################## Data Prepare ################################
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -63,13 +63,21 @@ def applymask(inputfolder,inputfile):
     return(masked)
 
 for i in range(len(os.listdir(infolder))):
-
     masked =applymask(infolder + 'render'+ str(i) , '/kdata.png')
     masked = np.round(masked*17/(np.max(masked)))
-    print( 'max:', np.max(masked))
+    # print( 'max:', np.max(masked))
     cv2.cvtColor(masked, cv2.COLOR_GRAY2RGB)
     cv2.imwrite(kfolder + 'img'+ str(i) +  '.png', masked)
+    for c in range(classes):
+        cmask = np.zeros((H, W), np.bool)
+        cmask = np.logical_not(np.abs(c-masked))
+        print (cmask)
+        print(mfolder+str(c)+'mask/'+'img'+str(i)+'.png')
+        cv2.imwrite(mfolder+str(c)+'mask/'+'img'+str(i)+'.png', cmask*1 )
+        print('c:',c)
+    
 
     masked =applymask(infolder + 'render'+ str(i) , '/im_wrap1.png')
     cv2.imwrite(wrapfolder + 'img'+ str(i) +  '.png', masked)
     print(i)
+
