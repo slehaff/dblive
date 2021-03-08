@@ -219,8 +219,8 @@ A59 = Activation('relu')(A58)
 print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
-outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1), activation= 'softmax')(outputImage)
 outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
+outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1), activation= 'softmax')(outputImage)
 
 # outputImage[2][0] = tf.math.argmax(outputImage[2])
 # outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
@@ -237,8 +237,8 @@ UModel.summary()
 def compile_model(model):
     # model = Model(input_image, output_image)
     # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer='adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(),
-                  metrics=['sparse_categorical_accuracy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
+    model.compile(optimizer='adam', loss = 'categorical_crossentropy',  #tf.keras.losses.SparseCategoricalCrossentropy(),
+                  metrics=['accuracy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
     model.summary()
     return(model)
 

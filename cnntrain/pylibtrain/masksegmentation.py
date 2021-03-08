@@ -25,6 +25,7 @@ infolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 wrapfolder ='/home/samir/Desktop/blender/pycode/segmentation/wrap/'
 kfolder ='/home/samir/Desktop/blender/pycode/segmentation/k/'
 mfolder ='/home/samir/Desktop/blender/pycode/segmentation/'
+hotkfolder = '/home/samir/Desktop/blender/pycode/segmentation/hotkey/'
 ######################################## Data Prepare ################################
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -62,22 +63,29 @@ def applymask(inputfolder,inputfile):
     masked = np.multiply(np.logical_not(mask), img)
     return(masked)
 
-for i in range(len(os.listdir(infolder))):
-    masked =applymask(infolder + 'render'+ str(i) , '/kdata.png')
-    masked = np.round(masked*17/(np.max(masked)))
-    # print( 'max:', np.max(masked))
-    cv2.cvtColor(masked, cv2.COLOR_GRAY2RGB)
-    cv2.imwrite(kfolder + 'img'+ str(i) +  '.png', masked)
-    for c in range(classes):
-        cmask = np.zeros((H, W), np.bool)
-        cmask = np.logical_not(np.abs(c-masked))
-        print (cmask)
-        print(mfolder+str(c)+'mask/'+'img'+str(i)+'.png')
-        cv2.imwrite(mfolder+str(c)+'mask/'+'img'+str(i)+'.png', cmask*1 )
-        print('c:',c)
-    
+def shuffledata():
+    for i in range(len(os.listdir(infolder))):
+        masked =applymask(infolder + 'render'+ str(i) , '/kdata.png')
+        masked = np.round(masked*17/(np.max(masked)))
+        # print( 'max:', np.max(masked))
+        cv2.cvtColor(masked, cv2.COLOR_GRAY2RGB)
+        cv2.imwrite(kfolder + 'img'+ str(i) +  '.png', masked)
+        hotmask = np.zeros((H,W,classes))
+        for c in range(classes):
+            cmask = np.zeros((H, W), np.bool)
+            cmask = np.logical_not(np.abs(c-masked)) #np.logical_not
+            # print (cmask)
+            print(mfolder+str(c)+'mask/'+'img'+str(i)+'.png')
+            cv2.imwrite(mfolder+str(c)+'mask/'+'img'+str(i)+'.png', cmask*1 )
+            print('c:',c)
+            hotmask[:,:,c] = cmask
+        np.save(hotkfolder+ 'npimg'+ str(i)+'.npy', hotmask)
+        
+        
 
-    masked =applymask(infolder + 'render'+ str(i) , '/im_wrap1.png')
-    cv2.imwrite(wrapfolder + 'img'+ str(i) +  '.png', masked)
-    print(i)
 
+        masked =applymask(infolder + 'render'+ str(i) , '/im_wrap1.png')
+        cv2.imwrite(wrapfolder + 'img'+ str(i) +  '.png', masked)
+        print(i)
+
+shuffledata()
