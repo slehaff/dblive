@@ -24,7 +24,7 @@ H = 160
 W = 160
 N = 18 # Number of classes corresponds to hfwrap periods
 
-EPOCHS = 7
+EPOCHS = 50
 inputFolder = '/home/samir/Desktop/blender/pycode/segmentation/'
 IMAGECOUNT = 100 #len(os.listdir(inputFolder))
 nclasses = 18 # Still number of classes
@@ -83,9 +83,9 @@ def to_png_array(folder_path, filename, array, file_count):
 
 def to_new_npy_array(folder_path, filename, array, file_count):
     for i in range(0, file_count, 1):
-        myfile = folder_path + str(i)+str(i)+'/'+ filename +'.npy'
+        myfile = folder_path+filename +str(i)+'.npy'
         img = np.load(myfile)
-        img = normalize_image255(img)
+        # img = normalize_image255(img)
         array.append(img)
         print('npyarray shape:', np.shape(array))
     return    
@@ -94,7 +94,7 @@ def to_new_npy_array(folder_path, filename, array, file_count):
 def to_npy_array(folder_path, array, file_count):
     for i in range(0, file_count, 1):
         myfile = folder_path + str(i)+'.npy'
-        img = np.load(myfile)
+        num = np.load(myfile)
         img = normalize_image255(img)
         array.append(img)
         print('npyarray shape:', np.shape(array))
@@ -107,10 +107,10 @@ def to_npy_array(folder_path, array, file_count):
 
 # Load and pre-process the training data
 wrap_images = []
-k_images = []
+k_masks = []
 #========================================= Use with dblive folder structure ===============================
 to_png_array(inputFolder+ 'wrap/', 'img',wrap_images, IMAGECOUNT)
-to_png_array(inputFolder+ 'k/','img' , k_images, IMAGECOUNT)
+to_new_npy_array(inputFolder+ 'hotkey/','npimg' , k_masks, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -119,10 +119,9 @@ to_png_array(inputFolder+ 'k/','img' , k_images, IMAGECOUNT)
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
 wrap_images = np.expand_dims(wrap_images, -1)
-k_images = np.expand_dims(k_images, -1)
-print('k_images shape:', k_images.shape)
+k_masks = np.expand_dims(k_masks, -1)
+print('k_masks shape:', k_masks.shape)
 print("input shape: {}".format(wrap_images.shape))
-# print("output shape: {}".format(nom_images.shape))
 print(len(wrap_images))
 
 
@@ -238,7 +237,7 @@ def compile_model(model):
     # model = Model(input_image, output_image)
     # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss = 'categorical_crossentropy',  #tf.keras.losses.SparseCategoricalCrossentropy(),
-                  metrics=['accuracy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
+                  metrics=['categorical_crossentropy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
     model.summary()
     return(model)
 
@@ -274,7 +273,7 @@ checkpointer = ModelCheckpoint(
 def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
-        history_temp = model.fit(wrap_images, k_images,
+        history_temp = model.fit(wrap_images, k_masks,
                                  batch_size=4,
                                  epochs=1,
                                  validation_split=0.2,
@@ -315,7 +314,15 @@ def combImages(i1, i2, i3):
 
 def DB_predict(i, x, y):
     predicted_img = model.predict(np.array([np.expand_dims(x, -1)]))
+    print('predicted shape:', predicted_img.shape)
     predicted_img = predicted_img.squeeze()
+    print('predicted shape:', predicted_img.shape)
+    print(predicted_img[80,80,:])
+    a=0
+    for i in range(18):
+        a = predicted_img[100,100,i]+a
+        print(a)
+
     # cv2.imwrite('validate/'+str(i)+'filteredSync.png',
     #             (255.0*predicted_img).astype(np.uint8))
     # cv2.imwrite('validate/'+str(i)+'input.png',
@@ -324,33 +331,37 @@ def DB_predict(i, x, y):
     cv2.imwrite('validate/test/'+str(i)+'combo.png', (1.0*combo).astype(np.uint8))
     return(combo)
 
-
-# get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'wrap/' +'img'+str(0)+ '.png'
-img = cv2.imread(myfile).astype(np.float32)
-img = resize(img, 160, 160)
-img = normalize_image255(img)
-inp_img =  make_grayscale(img)
-combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 10, 1):
-    print(i)
-    # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'wrap/' +'img'+str(i)+ '.png'
-    print(myfile)
+def yt():
+    # get_my_file('inp/' + str(1)+'.png')
+    myfile = inputFolder+'wrap/' +'img'+str(0)+ '.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
-    inp_img = make_grayscale(img)
-    #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder+'k/' +'img'+str(i)+ '.png'
-    img = cv2.imread(myfile).astype(np.float32)
-    img = resize(img, 160, 160)
-    img = normalize_image255(img)
-    out_img = make_grayscale(img)
-    # out_img = np.round(out_img/2)
-    combo = DB_predict(i, inp_img, out_img)
-    # combo[1]= undensclass(combo[1])
-    combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-test-V5.png',
-            (1.0*combotot).astype(np.uint8))
+    inp_img =  make_grayscale(img)
+    combotot = combImages(inp_img, inp_img, inp_img)
+    for i in range(0, 10, 1):
+        print(i)
+        # get_my_file('inp/' + str(i)+'.png')
+        myfile = inputFolder+'wrap/' +'img'+str(i)+ '.png'
+        print(myfile)
+        img = cv2.imread(myfile).astype(np.float32)
+        img = resize(img, 160, 160)
+        img = normalize_image255(img)
+        inp_img = make_grayscale(img)
+        #get_my_file('out/' + str(i)+'.png')
+        myfile = inputFolder+'k/' +'img'+str(i)+ '.png'
+        img = cv2.imread(myfile).astype(np.float32)
+        img = resize(img, 160, 160)
+        img = normalize_image255(img)
+        out_img = make_grayscale(img)
+        # out_img = np.round(out_img/2)
+        combo = DB_predict(i, inp_img, out_img)
+        # combo[1]= undensclass(combo[1])
+        combotot = np.concatenate((combotot, combo), axis=0)
+    # model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
+    cv2.imwrite('validate/'+'UNet02-800-test-KUN-test-V5.png',
+                (1.0*combotot).astype(np.uint8))
+yt()
+# cce = tf.keras.losses.CategoricalCrossentropy(reduction=tf.keras.losses.Reduction.NONE)
+# myloss = cce(k_masks[1],k_masks[2]).numpy()
+# print('myloss:', myloss)

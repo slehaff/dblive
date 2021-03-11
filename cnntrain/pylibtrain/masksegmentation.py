@@ -88,4 +88,4 @@ def shuffledata():
         cv2.imwrite(wrapfolder + 'img'+ str(i) +  '.png', masked)
         print(i)
 
-shuffledata()
+# shuffledata()
