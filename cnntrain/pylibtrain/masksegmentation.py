@@ -26,6 +26,7 @@ wrapfolder ='/home/samir/Desktop/blender/pycode/segmentation/wrap/'
 kfolder ='/home/samir/Desktop/blender/pycode/segmentation/k/'
 mfolder ='/home/samir/Desktop/blender/pycode/segmentation/'
 hotkfolder = '/home/samir/Desktop/blender/pycode/segmentation/hotkey/'
+nnkfolder = '/home/samir/Desktop/blender/pycode/segmentation/nnk/'
 ######################################## Data Prepare ################################
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -63,6 +64,15 @@ def applymask(inputfolder,inputfile):
     masked = np.multiply(np.logical_not(mask), img)
     return(masked)
 
+
+def reshuffledata():
+    for i in range(len(os.listdir(infolder))):
+        masked =applymask(infolder + 'render'+ str(i) , '/nnkdata.png')
+        masked = np.round(masked*17/(np.max(masked)))
+        # print( 'max:', np.max(masked))
+        cv2.cvtColor(masked, cv2.COLOR_GRAY2RGB)
+        cv2.imwrite(nnkfolder + 'img'+ str(i) +  '.png', masked)   
+
 def shuffledata():
     for i in range(len(os.listdir(infolder))):
         masked =applymask(infolder + 'render'+ str(i) , '/kdata.png')
@@ -89,3 +99,4 @@ def shuffledata():
         print(i)
 
 # shuffledata()
+reshuffledata()

@@ -159,30 +159,13 @@ def nnLprocess(folder):
     # kdatay = np.round(kdatay)
     # print('kdatay:', kdatay[::40, ::40])
     np.save(folder + 'nnkdata.npy', 1*predicted_img, allow_pickle=False)
-    cv2.imwrite( folder + 'nnkdata.png',255*predicted_img)
+    # prdicted_img = np.round(predicted_img*17/(np.max(predicted_img)))
+    cv2.imwrite( folder + 'nnkdata.png',1*predicted_img)
     # print('255*kdata:', 255*kdata[::40, ::40])
 
 
     return  #(predicted_img[0], predicted_img[1])
 
-
-
-def repairK(wrapfile, kfile, krepfile):
-    high = wrapfile
-    wdata = cv2.imread(high, 1)
-    krepdata = np.zeros((H, W), dtype=np.float)
-    k = kfile
-    kdata = cv2.imread(k, 1)
-
-    for j in range(1,160):
-        for i in range(1,160):
-            if ((wdata[i,j][0] - wdata[i-1,j][0])<0):
-                print('minus')
-
-                if ((wdata[i+1,j][0] - wdata[i,j][0])>0):  #bottom spike
-                    krepdata[i,j] = krepdata[i-1,j]+ 7
-                    print('krepdata:', krepdata)
-    cv2.imwrite(krepfile, 3.0*krepdata)
 
 
 def unwrap_k(folder):
@@ -464,7 +447,7 @@ folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
 bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
 
 
-# Lmodel = load_L_model()
+Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 for i in range(len(os.listdir(bfolder))-3):
@@ -477,8 +460,8 @@ for i in range(len(os.listdir(bfolder))-3):
     # makemonohigh(folder+'i')
 
     nnHprocess(folder + str(i)+'/')
-    # nnLprocess(folder + str(i)+'/')
-    # unwrap_k(folder + str(i)+'/')
+    nnLprocess(folder + str(i)+'/')
+    unwrap_k(folder + str(i)+'/')
     # newDepth(folder+ str(i), 400)
     # nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
 
@@ -496,6 +479,26 @@ for i in range(len(os.listdir(bfolder))-3):
 
 
 #========================================================= Parking Lot============================================================
+
+
+
+# def repairK(wrapfile, kfile, krepfile):
+#     high = wrapfile
+#     wdata = cv2.imread(high, 1)
+#     krepdata = np.zeros((H, W), dtype=np.float)
+#     k = kfile
+#     kdata = cv2.imread(k, 1)
+
+#     for j in range(1,160):
+#         for i in range(1,160):
+#             if ((wdata[i,j][0] - wdata[i-1,j][0])<0):
+#                 print('minus')
+
+#                 if ((wdata[i+1,j][0] - wdata[i,j][0])>0):  #bottom spike
+#                     krepdata[i,j] = krepdata[i-1,j]+ 7
+#                     print('krepdata:', krepdata)
+#     cv2.imwrite(krepfile, 3.0*krepdata)
+
 
 
 # def unwrap_r(low_f_file, high_f_file, folder):

@@ -24,9 +24,9 @@ H = 160
 W = 160
 N = 18 # Number of classes corresponds to hfwrap periods
 
-EPOCHS = 50
+EPOCHS = 40
 inputFolder = '/home/samir/Desktop/blender/pycode/segmentation/'
-IMAGECOUNT = 100 #len(os.listdir(inputFolder))
+IMAGECOUNT = 350 #len(os.listdir(inputFolder))
 nclasses = 18 # Still number of classes
 
 def make_grayscale(img):
