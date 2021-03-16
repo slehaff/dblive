@@ -25,7 +25,7 @@ H = 160
 W = 160
 
 EPOCHS = 50
-inputFolder = '/home/samir/Desktop/blender/pycode/multiscans/'
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -77,6 +77,25 @@ def to_png_array(folder_path, filename, array, file_count):
         img = normalize_image255(img)
         inp_img = make_grayscale(img)
         array.append(inp_img)
+
+    return  
+
+def to_aug_png_array(folder_path, filename, array, file_count):
+    for i in range(file_count):
+        print('count:', i)
+        myfile = folder_path + str(i)+'/'+ filename + '.png'
+        img = cv2.imread(myfile).astype(np.float32)
+        img = resize(img, 160, 160)
+        print('img:', img.shape)
+        img = normalize_image255(img)
+        inp_img = make_grayscale(img)
+        array.append(inp_img)
+        f1img = cv2.flip(inp_img,0)
+        array.append(f1img)
+        f1img = cv2.flip(inp_img,1)
+        array.append(f1img)
+        f1img = cv2.flip(inp_img,-1)
+        array.append(f1img)
     return   
 
 
@@ -104,8 +123,8 @@ def to_npy_array(folder_path, array, file_count):
 wrap_images = []
 unwrap_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
-to_png_array(inputFolder+'render', 'unwrap' , unwrap_images, IMAGECOUNT)
+to_aug_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_aug_png_array(inputFolder+'render', 'unwrap' , unwrap_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
