@@ -9,7 +9,7 @@ from os import path
 
 
 mainpath = '/home/samir/Desktop/blender/pycode'
-samplecount = len(os.listdir(mainpath+'/160spheres/'))
+samplecount = len(os.listdir(mainpath+'/blscans/'))
 
 rwidth = 160
 rheight = 160
@@ -177,14 +177,14 @@ def make_grayscale(img):
 
 
 def mask(folder):
-    color = folder + 'blendertexture.png'
+    color = folder + 'image8.png'
     print('color:', color)
     img1 = np.zeros((H, W), dtype=np.float)
     img1 = cv2.imread(color, 1).astype(np.float32)
     gray = make_grayscale(img1)
 
 
-    black = folder + 'blenderblack.png'
+    black = folder + 'image9.png'
     img2 = np.zeros((H, W), dtype=np.float)
     img2 = cv2.imread(black, 0).astype(np.float32)
     diff1 = np.subtract(gray, .5*img2)
@@ -212,10 +212,10 @@ def testarctan(folder):
 # process files
 
 for i in range(samplecount):
-    folder = '/home/samir/Desktop/blender/pycode/160spheres/render'+ str(i)+'/'
+    folder = '/home/samir/Desktop/blender/pycode/blscans/render'+ str(i)+'/'
     if path.exists(folder):
-        take_wrap4(folder, 'scan_wrap1.npy', 'im_wrap1.png', 'blenderimage', -1)
-        take_wrap4(folder, 'scan_wrap2.npy', 'im_wrap2.png', 'blenderimage', 5)
+        take_wrap4(folder, 'scan_wrap1.npy', 'im_wrap1.png', 'image', -1)
+        take_wrap4(folder, 'scan_wrap2.npy', 'im_wrap2.png', 'image', 3)
         mask(folder)
 #############################################################################################################################
     # images = glob.glob(folder+'*/image1.png', recursive= True)

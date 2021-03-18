@@ -9,8 +9,8 @@ import math
 import os.path
 from os import path
 
-high_freq = 13
-low_freq = 1
+high_freq = 15
+low_freq = .7
 rwidth = 160
 rheight = 160
 H = 160
@@ -18,7 +18,7 @@ W = 160
 
 
 mainpath = '/home/samir/Desktop/blender/pycode'
-samplecount = len(os.listdir(mainpath+'/160spheres/'))
+samplecount = len(os.listdir(mainpath+'/blscans/'))
 
 PI = np.pi
 
@@ -197,11 +197,11 @@ def makeclouds(scanfolder, count):
 # unw('160scanplanes', 299)
 # makeDDbase(299)
 
-unw('scans', 50)
-print('depth')
-depth('scans', 50, 299)
-print('makeclouds')
-makeclouds('scans', 50)
+unw('blscans', samplecount)
+# print('depth')
+# depth('scans', 50, 299)
+# print('makeclouds')
+# makeclouds('scans', 50)
 
 
 

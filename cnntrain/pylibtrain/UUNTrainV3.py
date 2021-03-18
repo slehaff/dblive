@@ -24,8 +24,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 50
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/blscans/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -259,7 +259,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet-UUN-150.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet-UUN-200.h5')
     model.summary()
     return(model)
 
@@ -334,7 +334,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/unwrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -343,7 +343,7 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
@@ -358,6 +358,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet-UUN-200.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet-UUN-200.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet-UUN-aug2-350.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet-UUN-aug2-350.png',
             (1.0*combotot).astype(np.uint8))

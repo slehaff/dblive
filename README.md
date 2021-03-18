@@ -13,3 +13,12 @@ Training is a major task for dblive, Folder format for valid input is:
 UNTrain.py is the main training input py, this is a Unet trainer with two identical neural nets for processing:
     HFringe to HWrapped
     HWrapped to Kvalue file
+
+Processing training data: 
+net1: fringe -> wrap1
+net2: wrap1 -> unwrapped
+
+Training uses simulated input from blender, processing of sim input is:
+
+db3: scan/pylib/multiphasewrap.py for 4phase wrapping
+db3: scan/pylib/scanunwrap.py for unwrapping and point cloud
