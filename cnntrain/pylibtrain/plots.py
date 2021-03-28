@@ -108,13 +108,42 @@ def makemonohigh(folder):
     cv2.imwrite(folder+'monohigh.png', monohigh)
     return
 
+def singleplot():
+    pass
+    folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render'
+    folder2 = '/home/samir/Desktop/blender/pycode/scans5/render'
+    for i in range(10):
+        high = folder1 + str(i)+ '/blenderimage0.png'
+        print(high)
+        colorhigh = cv2.imread(high, 1).astype(np.float32)
+        colorhigh -= colorhigh.mean()
+        colorhigh = resize(colorhigh, W, H)
+        monohigh1 = make_grayscale(colorhigh)
+
+        high = folder2 +str(i)+  '/image0.png'
+        colorhigh = cv2.imread(high, 1)
+        colorhigh = resize(colorhigh, W, H)
+        monohigh2 = make_grayscale(colorhigh)
+
+
+        x = range(160)
+
+        for j in range(0,160,20):
+            fig = plt.figure()
+            plt.plot(x, monohigh1[:,j],
+            x, monohigh2[:,j])
+            plt.ylabel(str(j))
+            print('render'+str(i), j)
+            # fig.savefig(my_folder+ 'plot'+str(j)+'.png')
+            # plt.close(fig) 
+            plt.show()
 
 
 def myplot():
-    # folder = '/home/samir/Desktop/blender/pycode/stitchfiles/'
-    # bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
-    # folder1 = '/home/samir/Desktop/blender/pycode/stitch/render'
-    # folder2 = '/home/samir/Desktop/blender/pycode/stitch/render'
+    folder = '/home/samir/Desktop/blender/pycode/stitch/'
+    bfolder = '/home/samir/Desktop/blender/pycode/stitch/'
+    folder1 = '/home/samir/Desktop/blender/pycode/stitch/render'
+    folder2 = '/home/samir/Desktop/blender/pycode/stitch/render'
 
     # monohigh = np.zeros((H, W), dtype=np.float64)
 
@@ -152,20 +181,9 @@ folder1 = '/home/samir/Desktop/blender/pycode/stitch/render0/kdata.png'
 
 # denstext(folder1)
 # coldens(folder1)
-densclass(folder1)
+# densclass(folder1)
+singleplot()
 
 
-
-def repairK(wrapfile, kfile, krepfile):
-    high = folder2 + str(i)+ wrapfile
-    wdata = cv2.imread(high, 1)
-
-    k = folder2 + str(i)+ kfile
-    kdata = cv2.imread(k, 1)
-
-    for j in range(160):
-        for i in range(160):
-            if ((wdata[i,j] - wdata[i-1,j]<0) and (wdata[i+1,j] - wdata[i,j]>0)):  #bottom spike
-                kdata[i,j] = kdata[i-1,j]+ 7
 
 

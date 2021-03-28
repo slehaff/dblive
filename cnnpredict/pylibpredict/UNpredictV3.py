@@ -154,7 +154,8 @@ def nnLprocess(folder):
     print('elapsed low:', end-start)
 
     mask = np.load(folder+'mask.npy')
-    unwdata = np.multiply(np.logical_not(mask), predicted_img)
+    unwdata = predicted_img # mask is not calculated properly
+    # unwdata = np.multiply(np.logical_not(mask), predicted_img)
     # kdatay = 255/6*predicted_img
     # kdatay = np.round(kdatay)
     # print('kdatay:', kdatay[::40, ::40])
@@ -470,7 +471,7 @@ for i in range(len(os.listdir(bfolder))-3):
     # generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'unwrap.png', folder +'pointcl-unw.ply')
 
     # unw('scans', 44)
-    # depth('scans', 44, 199)
+    # depth('scans', 44, 400)
     # makeclouds('scans', 44)
     # print('done!')
 
