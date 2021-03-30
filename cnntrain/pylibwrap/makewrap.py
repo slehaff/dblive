@@ -9,7 +9,7 @@ from os import path
 
 
 mainpath = '/home/samir/Desktop/blender/pycode'
-samplecount = len(os.listdir(mainpath+'/100zeroplanes/'))
+samplecount = len(os.listdir(mainpath+'/headscans2/'))
 
 rwidth = 160
 rheight = 160
@@ -40,7 +40,7 @@ def get_A(im_arr):
     for i in range(3):
         A = np.sum(A, im_arr[i])
     A = np.divide(A, 3)
-    return A
+    return Abasecount
 
 
 def get_B(im_arr):
@@ -212,7 +212,7 @@ def testarctan(folder):
 # process files
 
 for i in range(samplecount):
-    folder = '/home/samir/Desktop/blender/pycode/zeroscans2/render'+ str(i)+'/'
+    folder = '/home/samir/Desktop/blender/pycode/origheads2/render'+ str(i)+'/'
     if path.exists(folder):
         take_wrap4(folder, 'scan_wrap1.npy', 'im_wrap1.png', 'image', -1)
         take_wrap4(folder, 'scan_wrap2.npy', 'im_wrap2.png', 'image', 3)

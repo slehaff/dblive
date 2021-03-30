@@ -140,18 +140,18 @@ def unw_debug(low_f_file, high_f_file, folder, start, stop, step):
 
 
 def makeDDbase(count):
-    print('400newplanes')
+    print('coldepthplanes')
     phibase = np.zeros((rheight, rwidth,count), dtype=np.float64)
     for u in range(rwidth):
         for v in range(rheight):
             print('u=', u, 'v=', v)
             for i in range(count):
                 # print('i=',i)
-                folder = '/home/samir/Desktop/blender/pycode/400newPlanes/render'+ str(i)+'/'
+                folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+ str(i)+'/'
                 unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
                 unwrap = np.load(folder+'unwrap.npy')   
                 phibase[u,v,i] = unwrap[u,v]
-    folder = '/home/samir/Desktop/blender/pycode/400newplanes/'
+    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/'
     wr_save = folder + 'DDbase.npy'
     np.save(wr_save, phibase, allow_pickle=False)
 
@@ -185,7 +185,7 @@ def makeDepth(folder, basecount):
     
 
 def newDepth(folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/400newplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/coldepthplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'unwrap.npy' )
     mask = np.load(folder+'mask.npy' )
@@ -203,15 +203,10 @@ def newDepth(folder, basecount):
                     if (unwrap[i,j]< DBase[i,j,s]):
                         ds = (unwrap[i,j] - DBase[i,j,s])/( DBase[i,j,s]- DBase[i,j,s-10])
                         zee = s+ds*10
-                        # if(i==80 and j==80 ):
-                        #     print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
-                        # else:
-                        #     if(i==82 and j==82 ):
-                        #         print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
                         break
                     else:
                         s+=1
-                        if s==400:
+                        if s==250:
                             print('not found!')
 
                 # print(i,j,unwrap[i,j],DBase[i,j,s])
@@ -390,19 +385,19 @@ def getplys(infolder ):
 
 
 def mydepth():
-    folder = '/home/samir/Desktop/blender/pycode/400T2planes/'
-    unw(folder,400)
-    makeDDbase(400)
-
+    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/'
+    unw(folder,250)
+    makeDDbase(250)
+# Run multiphasewrap on the sim output prior to unwrapping
 # mydepth()
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/zeroscans2'
+    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes'
     count=  len(os.listdir(folder))
 
-    unw(folder, count)
-    depth(folder, count, 400)
+    # unw(folder, count)
+    # depth(folder, count, 250)
     makeclouds(folder, count)
     
     # getplys(folder)
