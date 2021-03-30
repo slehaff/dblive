@@ -67,9 +67,9 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(21):
-    folder1 = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/scans/render'+str(i)
+for i in range(0,210,20):
+    folder1 = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 
@@ -78,18 +78,20 @@ for i in range(21):
     colorhigh = resize(colorhigh, W, H)
     monohigh1 = make_grayscale(colorhigh)
     monohigh1 = 255*normalize_image(monohigh1)
-    high = folder1 + '/im_wrap1.png'
-    colorhigh = cv2.imread(high, 1)
-    colorhigh = resize(colorhigh, W, H)
-    monohigh3 = make_grayscale(colorhigh)
-    monohigh3 = 255*normalize_image(monohigh3)
+    high = folder1 + '/depth.npy'
+    # colorhigh = cv2.imread(high, 1)
+    # colorhigh = resize(colorhigh, W, H)
+    # monohigh3 = make_grayscale(colorhigh)
+    # monohigh3 = 255*normalize_image(monohigh3)
+    colorhigh = np.load(high)
+    monohigh3 = colorhigh
 
-    high = folder2 + '/blenderimage0.png'
+    high = folder2 + '/image0.png'
     colorhigh = cv2.imread(high, 1)
     colorhigh = resize(colorhigh, W, H)
     monohigh2 = make_grayscale(colorhigh)
     monohigh2 = 255*normalize_image(monohigh2)
-    high = folder2 + '/cnnwrap1.png'
+    high = folder2 + '/im_wrap1.png'
     colorhigh = cv2.imread(high, 1)
     colorhigh = resize(colorhigh, W, H)
     monohigh4 = make_grayscale(colorhigh)
