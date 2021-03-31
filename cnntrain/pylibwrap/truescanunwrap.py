@@ -389,7 +389,7 @@ def mydepth():
     unw(folder,250)
     makeDDbase(250)
 # Run multiphasewrap on the sim output prior to unwrapping
-# mydepth()
+mydepth()
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
@@ -402,7 +402,7 @@ def myrun():
     
     # getplys(folder)
 
-myrun()
+# myrun()
 
 
 def debug():
