@@ -11,7 +11,7 @@ from os import path
 import shutil
 
 high_freq = 14 #14
-low_freq = .7
+low_freq = .705
 rwidth = 160
 rheight = 160
 
@@ -396,9 +396,9 @@ def myrun():
     folder = '/home/samir/Desktop/blender/pycode/coldepthplanes'
     count=  len(os.listdir(folder))
 
-    # unw(folder, count)
+    unw(folder, count)
     # depth(folder, count, 250)
-    makeclouds(folder, count)
+    # makeclouds(folder, count)
     
     # getplys(folder)
 

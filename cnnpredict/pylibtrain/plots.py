@@ -67,7 +67,7 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(0,210,20):
+for i in range(0,250,20):
     folder1 = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+ str(i)
     folder2 = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+str(i)
 
@@ -78,7 +78,11 @@ for i in range(0,210,20):
     colorhigh = resize(colorhigh, W, H)
     monohigh1 = make_grayscale(colorhigh)
     monohigh1 = 255*normalize_image(monohigh1)
-    high = folder1 + '/depth.npy'
+    high1 = folder1 +'/unwrap.npy'
+    monohigh1 = np.load(high1)
+    
+    
+    high = folder1 + '/kdata.npy'
     # colorhigh = cv2.imread(high, 1)
     # colorhigh = resize(colorhigh, W, H)
     # monohigh3 = make_grayscale(colorhigh)
