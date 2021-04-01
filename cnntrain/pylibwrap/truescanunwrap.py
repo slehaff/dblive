@@ -23,6 +23,15 @@ rheight = 160
 
 PI = np.pi
 
+def getplys(infolder ):       
+    count=len(os.listdir(infolder))
+    for i in range(count):
+        print(count)
+        shutil.copyfile(infolder+'/render'+str(i)+'/pointcl-depth.ply', infolder +'files/plyfolder/points'+str(i)+'.ply')
+        shutil.copyfile(infolder+'/render'+str(i)+'/image8.png', infolder +'files/imgfolder/image'+str(i)+'.png')
+        
+
+
 
 def unwrap_r(low_f_file, high_f_file, folder):
     filelow = folder + low_f_file
@@ -212,7 +221,7 @@ def newDepth(folder, basecount):
                 # print(i,j,unwrap[i,j],DBase[i,j,s])
                 if zee == 0:
                     print('not found')
-                depth[i,j]= (zee/400*-40 + 55)*1
+                depth[i,j]= (zee/250*-25 + 40)*1
 
     # print('depth:', np.amax(depth), np.amin(depth))
     print('nndepthrange=', np.ptp(depth), np.max(depth), np.min(depth) )
@@ -302,7 +311,7 @@ def generate_pointcloud(rgb_file, mask_file,depth_file,ply_file):
             # if Z==0: continue
             # X = (u - centerX) * Z / focalLength
             # Y = (v - centerY) * Z / focalLength
-            if (mask.getpixel((v,u))<55):
+            if (mask.getpixel((v,u))<25):
                 # Z = depth.getpixel((u, v))
                 Z = depth[u,v]
                 if Z < 0:
@@ -389,20 +398,21 @@ def mydepth():
     unw(folder,250)
     makeDDbase(250)
 # Run multiphasewrap on the sim output prior to unwrapping
-mydepth()
+# mydepth()
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes'
+    folder = '/home/samir/Desktop/blender/pycode/30scans'
     count=  len(os.listdir(folder))
+    print(count)
 
     unw(folder, count)
-    # depth(folder, count, 250)
-    # makeclouds(folder, count)
+    depth(folder, count, 250)
+    makeclouds(folder, count)
     
     # getplys(folder)
 
-# myrun()
+myrun()
 
 
 def debug():

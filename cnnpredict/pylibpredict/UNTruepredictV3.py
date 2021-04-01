@@ -31,11 +31,12 @@ PI = np.pi
 
 
 
-high_freq = 14
-low_freq = .7
-H = 160
+high_freq = 14 #14
+low_freq = .705
+rwidth = 160
+rheight = 160
+H =160
 W = 160
-
 
 def resize(img, w,h):
     print(img.shape)
@@ -85,14 +86,14 @@ def makemonohigh(folder):
 
 
 def mask(folder):
-    color = folder + 'blendertexture.png'
+    color = folder + 'image8.png'
     print('color:', color)
     img1 = np.zeros((H, W), dtype=np.float)
     img1 = cv2.imread(color, 1).astype(np.float32)
     gray = make_grayscale(img1)
 
 
-    black = folder + 'blenderblack.png'
+    black = folder + 'image9.png'
     img2 = np.zeros((H, W), dtype=np.float)
     img2 = cv2.imread(black, 0).astype(np.float32)
     diff1 = np.subtract(gray, .5*img2)
@@ -116,9 +117,9 @@ def DB_predict( model, x):
 
 
 def nnHprocess(folder):
-    high = folder + 'blenderimage0.png' #'blenderimage0.png' or 'image0.png'
+    high = folder + 'image8.png' #'blenderimage0.png' or 'image0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    black = folder + 'blenderblack.png' #'' blenderblack.png or 'image9.png'
+    black = folder + 'image9.png' #'' blenderblack.png or 'image9.png'
     image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
@@ -244,45 +245,42 @@ def makeDepth( folder, basecount):
     cv2.imwrite(folder + '/nndepth.png', im_depth)
 
 def newDepth(folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/400newplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/coldepthplanes/DDbase.npy'
     DBase = np.load(basefile)
-    unwrap = np.load(folder+'/nnunwrap.npy' )
-    unwrap = unwrap 
+    unwrap = np.load(folder+'/unwrap.npy' )
+    mask = np.load(folder+'/mask.npy' )
     # print('DBase:', np.amax(DBase), np.amin(DBase))
     # print('unwrap:', np.amax(unwrap), np.amin(unwrap))
-    depth = np.zeros((H, W), dtype=np.float64)
+    depth = np.zeros((rheight, rwidth), dtype=np.float64)
     zee=0
-    for i in range(W):
+    for i in range(rwidth):
         # print('i:', i)
-        for j in range(H):
-            s=0
-            for s in range(0, basecount-1,10):
-                if (unwrap[i,j]< DBase[i,j,s]):
-                    ds = (unwrap[i,j] - DBase[i,j,s])/( DBase[i,j,s]- DBase[i,j,s-10])
-                    zee = s+ds*10
-                    # if(i==80 and j==80 ):
-                    #     print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
-                    # else:
-                    #     if(i==82 and j==82 ):
-                    #         print('z=', zee,'depth=', (zee/400*-40 + 60)*1,'s=', s,'ds=', ds)
-                    break
-                else:
-                    s+=1
-                    if s==400:
-                        print('not found!')
+        for j in range(rheight):
+            if not(mask[i,j]):
 
-            # print(i,j,unwrap[i,j],DBase[i,j,s])
-            if zee == 0:
-                print('not found')
-            depth[i,j]= (zee/400*-40 + 55)*1
-            # print('found:',i,j, unwrap[i,j], DBase[i,j,s],s)
-            # print(s)
+                s=0
+                for s in range(0, basecount-1,10):
+                    if (unwrap[i,j]< DBase[i,j,s]):
+                        ds = (unwrap[i,j] - DBase[i,j,s])/( DBase[i,j,s]- DBase[i,j,s-10])
+                        zee = s+ds*10
+                        break
+                    else:
+                        s+=1
+                        if s==250:
+                            print('not found!')
+
+                # print(i,j,unwrap[i,j],DBase[i,j,s])
+                if zee == 0:
+                    print('not found')
+                depth[i,j]= (zee/250*-25 + 40)*1
+
     # print('depth:', np.amax(depth), np.amin(depth))
-    im_depth = depth# np.max(unwrapdata)*255)
     print('nndepthrange=', np.ptp(depth), np.max(depth), np.min(depth) )
+
+    im_depth = depth# np.max(unwrapdata)*255)
     cv2.imwrite(folder + '/nndepth.png', im_depth)
-    print(folder+'/nndepth.png')
     np.save(folder+'/nndepth.npy' ,im_depth , allow_pickle=False)
+
 
 
 
@@ -437,21 +435,21 @@ def makeclouds(scanfolder, count):
             # generate_pointcloud(folder + 'blendertexture.png', folder + '5mask.png' , folder + 'im_wrap1.png', folder +'pointcl-high.ply')
             # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png' , folder + 'im_wrap2.png', folder +'pointcl-low.ply')
             # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png', folder + 'nnkunwrap.png', folder +'pointcl-unw.ply')
-            generate_pointcloud(folder + 'blendertexture.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
+            generate_pointcloud(folder + 'image9.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
 
 
 
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/30scans/render'
+bfolder = '/home/samir/Desktop/blender/pycode/30scans/'
 
 
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
-for i in range(len(os.listdir(bfolder))-3):
+for i in range(len(os.listdir(bfolder))-1):
     # folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
@@ -464,7 +462,7 @@ for i in range(len(os.listdir(bfolder))-3):
     nnLprocess(folder + str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
     newDepth(folder+ str(i), 400)
-    nngenerate_pointcloud(folder+str(i) + '/blendertexture.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
+    nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
 
