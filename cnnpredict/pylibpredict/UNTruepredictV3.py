@@ -247,7 +247,7 @@ def makeDepth( folder, basecount):
 def newDepth(folder, basecount):
     basefile = '/home/samir/Desktop/blender/pycode/coldepthplanes/DDbase.npy'
     DBase = np.load(basefile)
-    unwrap = np.load(folder+'/unwrap.npy' )
+    unwrap = np.load(folder+'/nnunwrap.npy' )
     mask = np.load(folder+'/mask.npy' )
     # print('DBase:', np.amax(DBase), np.amin(DBase))
     # print('unwrap:', np.amax(unwrap), np.amin(unwrap))
@@ -461,8 +461,8 @@ for i in range(len(os.listdir(bfolder))-1):
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
-    newDepth(folder+ str(i), 400)
-    nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
+    newDepth(folder+ str(i)+'/' , 400)
+    nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
 
