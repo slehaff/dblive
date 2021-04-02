@@ -23,8 +23,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 20
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
+EPOCHS = 5
+inputFolder = '/home/samir/Desktop/blender/pycode/30train400T/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -234,12 +234,12 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-WUN-100-V2.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -319,6 +319,6 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNetest02-400-WUN-100-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNetest02-400-WUN-100-V2.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-WUN-100-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN30-400-WUN-100-V2.png',
             (1.0*combotot).astype(np.uint8))

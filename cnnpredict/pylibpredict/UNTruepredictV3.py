@@ -69,12 +69,12 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-WUN-100-V2.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet-UUN-aug-350.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-KUN-100-V2.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -117,10 +117,10 @@ def DB_predict( model, x):
 
 
 def nnHprocess(folder):
-    high = folder + 'image8.png' #'blenderimage0.png' or 'image0.png'
+    high = folder + 'image0.png' #'blenderimage0.png' or 'image0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    black = folder + 'image9.png' #'' blenderblack.png or 'image9.png'
-    image2 = cv2.imread(black,1).astype(np.float32)
+    # black = folder + 'image9.png' #'' blenderblack.png or 'image9.png'
+    # image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
@@ -461,7 +461,7 @@ for i in range(len(os.listdir(bfolder))-1):
     nnHprocess(folder + str(i)+'/')
     nnLprocess(folder + str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
-    newDepth(folder+ str(i)+'/' , 400)
+    newDepth(folder+ str(i)+'/' , 250)
     nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
