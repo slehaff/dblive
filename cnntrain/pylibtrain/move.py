@@ -2,9 +2,9 @@ import os
 import shutil
 
 mainpath = '/home/samir/Desktop/blender/pycode/'
-infolder = 'multi/300newplanes/'
-outfolder = 'multi/multiscans/'
-offset = 800
+infolder = '30train2T/'
+outfolder = '30train2TM/'
+offset = 400
 
 
 def movfiles(infolder, outfolder, offset):

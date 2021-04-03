@@ -74,7 +74,7 @@ def load_H_model():
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-KUN-100-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-F-KUN-50-V2.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -141,7 +141,7 @@ def nnHprocess(folder):
     return  #(predicted_img[0], predicted_img[1])
 
 def nnLprocess(folder):
-    high = folder + 'unwrap1.png'
+    high = folder + 'im_wrap1.png'
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
