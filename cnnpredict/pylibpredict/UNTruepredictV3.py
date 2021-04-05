@@ -74,7 +74,7 @@ def load_H_model():
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-F-KUN-50-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-1600-F-KUN-80-V2.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -141,7 +141,7 @@ def nnHprocess(folder):
     return  #(predicted_img[0], predicted_img[1])
 
 def nnLprocess(folder):
-    high = folder + 'im_wrap1.png'
+    high = folder + 'unwrap1.png'
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
@@ -442,8 +442,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/30scans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/30scans/'
+folder = '/home/samir/Desktop/blender/pycode/scans5/render'
+bfolder = '/home/samir/Desktop/blender/pycode/scans5/'
 
 
 Lmodel = load_L_model()
@@ -455,14 +455,14 @@ for i in range(len(os.listdir(bfolder))-1):
 
     print('i:', i)
     mask(folder+str(i)+'/')
-    # unwrap_k(folder + str(i)+'/')
+    unwrap_k(folder + str(i)+'/')
     # makemonohigh(folder+'i')
 
-    nnHprocess(folder + str(i)+'/')
-    nnLprocess(folder + str(i)+'/')
+    # nnHprocess(folder + str(i)+'/')
+    # nnLprocess(folder + str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
-    newDepth(folder+ str(i)+'/' , 250)
-    nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
+    # newDepth(folder+ str(i)+'/' , 250)
+    # nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
 

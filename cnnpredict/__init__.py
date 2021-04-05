@@ -27,9 +27,9 @@ def loopforever():
                 print('black', len(black))
                 print('color', len(color))
                 print('high', len(high))
-                cv2.imwrite(f+'/blenderimage0.png', high)
-                cv2.imwrite(f+'/blendertexture.png', color)
-                cv2.imwrite(f+'/blenderblack.png', black)
+                cv2.imwrite(f+'/image0.png', high)
+                cv2.imwrite(f+'/image8.png', color)
+                cv2.imwrite(f+'/image9.png', black)
                 print(f)
 t = threading.Thread(target=loopforever)
 

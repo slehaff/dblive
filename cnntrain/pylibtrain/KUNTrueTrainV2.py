@@ -19,12 +19,13 @@ from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
+from tensorflow.keras.utils import plot_model
 
 H = 160
 W = 160
 
-EPOCHS = 5
-inputFolder = '/home/samir/Desktop/blender/pycode/30train400T/'
+EPOCHS = 50
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 
@@ -68,8 +69,8 @@ def to_array(folder_path, array, file_count):
 
 def to_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
+        print('count:', i)
         myfile = folder_path + str(i)+'/'+ filename + '.png'
-        print(myfile)
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
@@ -100,23 +101,23 @@ def to_npy_array(folder_path, array, file_count):
 
 
 # Load and pre-process the training data
-fringe_images = []
-hwrap_images = []
+wrap_images = []
+k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+ '/render', 'image0', fringe_images, IMAGECOUNT) #im_wrap1
-to_png_array(inputFolder + '/render', 'im_wrap1' , hwrap_images, IMAGECOUNT) #kdata
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
 # to_array('/home/samir/serverless/new1-469/1/wrap/', fringe_images, IMAGECOUNT)
 # to_array('/home/samir/serverless/new1-469/unwrap/', unwrap_images, IMAGECOUNT)
 
-# Expand the image dimension to conform with the shape required by tensorflow.keras and tensorflow, inputshape=(..., h, w, nchannels).
-fringe_images = np.expand_dims(fringe_images, -1)
-hwrap_images = np.expand_dims(hwrap_images, -1)
-print("input shape after expand: {}".format(fringe_images.shape))
+# Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
+wrap_images = np.expand_dims(wrap_images, -1)
+k_images = np.expand_dims(k_images, -1)
+print("input shape: {}".format(wrap_images.shape))
 # print("output shape: {}".format(nom_images.shape))
-print(len(fringe_images))
+print(len(wrap_images))
 
 
 
@@ -233,13 +234,19 @@ model = UModel
 
 
 def load_model():
-    model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-WUN-100-V2.h5')
+    model = tf.keras.models.load_model(
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
     model.summary()
     return(model)
 
 
 model = load_model()
+
+
+# tf.keras.utils.plot_model(
+#    model, to_file='model.png', show_shapes=False, show_dtype=False,
+#     show_layer_names=True, rankdir='TB', expand_nested=False, dpi=96
+# )
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -248,8 +255,8 @@ checkpointer = ModelCheckpoint(
 def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
-        history_temp = model.fit(fringe_images, hwrap_images,
-                                 batch_size=4,
+        history_temp = model.fit(wrap_images, k_images,
+                                 batch_size=2,
                                  epochs=1,
                                  validation_split=0.2,
                                  callbacks=[checkpointer])
@@ -296,7 +303,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder + '/render' + str(1)+'/im_wrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -305,20 +312,21 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/image0.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/kdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
+    # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-400-WUN-100-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-400-WUN-100-V2.png',
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-800-test-KUN-scans5-V3.png',
             (1.0*combotot).astype(np.uint8))

@@ -21,7 +21,7 @@ from keras.layers import Conv2D, MaxPooling2D, Add
 
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/160planes/'
+inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 def make_grayscale(img):
@@ -104,8 +104,8 @@ output_images = []
 # to_array('new1/1/wrap/', output_images, 150)
 # print('new1/1/wrap')
 
-to_png_array( inputFolder + 'render', 'blenderimage0', input_images, IMAGECOUNT)
-to_png_array(inputFolder + 'render', 'im_wrap1' , output_images, IMAGECOUNT)
+to_png_array( inputFolder + 'render', 'nnkdata', input_images, IMAGECOUNT)
+to_png_array(inputFolder + 'render', 'kdata' , output_images, IMAGECOUNT)
 
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
@@ -186,7 +186,7 @@ val_loss = []
 convweights = []
 
 compile_model(cnn1_model)
-# model = cnn1_model
+model = cnn1_model
 
 
 def load_model():
@@ -196,7 +196,7 @@ def load_model():
     return(model)
 
 
-model = load_model()
+# model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -253,7 +253,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder +  'render' + str(1)+'/blenderimage0.png'
+myfile = inputFolder +  'render' + str(1)+'/nnkdata.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = normalize_image255(img)
 inp_img = make_grayscale(img)
@@ -261,17 +261,17 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder +  'render' + str(i)+'/blenderimage0.png'
+    myfile = inputFolder +  'render' + str(i)+'/nnkdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder +  'render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder +  'render' + str(i)+'/kdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
 # model.save('/home/samir/dblive/cnnpredict/models/cnnmodels/cnn2a-pretrained-bmodel-shd-1npy-20-100.h5')
-cv2.imwrite('validate/'+'cnnres01-220-wrap1'+'-200-adam-noBN.png',
+cv2.imwrite('validate/'+'cnnres01-220-kdata'+'-50.png',
             (1.0*combotot).astype(np.uint8))
