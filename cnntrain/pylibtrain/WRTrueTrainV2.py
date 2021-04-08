@@ -23,8 +23,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 5
-inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/headscans/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 print(IMAGECOUNT,'Imagecount')
@@ -304,7 +304,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 90, 1):
+for i in range(0, 1, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder + '/render' + str(i)+'/image0.png'

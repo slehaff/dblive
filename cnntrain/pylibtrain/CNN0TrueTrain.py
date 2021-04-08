@@ -20,8 +20,8 @@ from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from keras.layers import Conv2D, MaxPooling2D, Add
 
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
+EPOCHS = 50
+inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 def make_grayscale(img):

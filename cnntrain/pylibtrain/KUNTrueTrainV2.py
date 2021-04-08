@@ -25,8 +25,8 @@ H = 160
 W = 160
 
 EPOCHS = 50
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
-IMAGECOUNT = len(os.listdir(inputFolder))
+inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
+IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 
 def make_grayscale(img):
@@ -104,7 +104,7 @@ def to_npy_array(folder_path, array, file_count):
 wrap_images = []
 k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'nnkdata', wrap_images, IMAGECOUNT)
 to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
@@ -235,12 +235,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-50-V2.h5')
     model.summary()
     return(model)
 
 
-model = load_model()
+# model = load_model()
 
 
 # tf.keras.utils.plot_model(
@@ -303,7 +303,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
+myfile = inputFolder+'render' + str(1)+'/nnkdata.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -312,7 +312,7 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/nnkdata.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
@@ -327,6 +327,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-scans5-V3.png',
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-800-test-KUN-100-V2.png',
             (1.0*combotot).astype(np.uint8))

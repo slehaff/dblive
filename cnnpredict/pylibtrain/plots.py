@@ -67,29 +67,48 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(0,4):
-    folder1 = '/home/samir/Desktop/blender/pycode/30scans/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/30scans/render'+str(i)
+for i in range(0,10):
+    folder1 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 
-    # high = folder1 + '/nndepth.npy'
-    # monohigh3 = np.load(high)
+    high = folder1 + '/unwrap.npy'
+    
+    print(high)
     # colorhigh = cv2.imread(high, 1)
-    # colorhigh = resize(colorhigh, W, H)
     # monohigh1 = make_grayscale(colorhigh)
     # monohigh1 = 255*normalize_image(monohigh1)
-    # high1 = folder1 +'/unwrap.npy'
-    # monohigh1 = np.load(high1)
+    monohigh1 = np.load(high)
+    print('unwrange=', np.ptp(monohigh1), np.max(monohigh1), np.min(monohigh1) )
     
-    
-    # high = folder1 + '/nnunwrap.npy'
-    # colorhigh = cv2.imread(high, 1)
-    # colorhigh = resize(colorhigh, W, H)
+    # high = folder1 + '/depth.png'
+    high1 = folder1 + '/nnunwrap.npy'
+    print(high1)
+    # colorhigh = cv2.imread(high1, 1)
     # monohigh3 = make_grayscale(colorhigh)
     # monohigh3 = 255*normalize_image(monohigh3)
-    colorhigh = np.load(high)
+    colorhigh = np.load(high1)
+    print('unwrange=', np.ptp(colorhigh), np.max(colorhigh), np.min(colorhigh) )
+
     monohigh3 = colorhigh
+
+    high = folder1 + '/unwrap.png'
+    print(high)
+    colorhigh = cv2.imread(high, 1)
+    monohigh2 = make_grayscale(colorhigh)
+    monohigh2 = 255*normalize_image(monohigh2)
+    # monohigh1 = np.load(high)
+    
+    
+    # high = folder1 + '/depth.png'
+    high1 = folder1 + '/nnunwrap.png'
+    print(high1)
+    colorhigh = cv2.imread(high1, 1)
+    monohigh4 = make_grayscale(colorhigh)
+    monohigh4 = 255*normalize_image(monohigh4)
+    # colorhigh = np.load(high1)
+    # monohigh3 = colorhigh
 
     # high = folder2 + '/image0.png'
     # colorhigh = cv2.imread(high, 1)
@@ -104,11 +123,11 @@ for i in range(0,4):
 
     plt.plot(
     x, monohigh1[:,80],'g',
-    x, monohigh3[:,80],'m')
+    x, monohigh3[:,80],'y')
     plt.ylabel(str(i)) 
     plt.show()
-    # plt.plot(
-    # x, monohigh2[:,80],'r',
-    # x, monohigh4[:,80],'b')
-    # plt.ylabel(str(i)) 
-    # plt.show()
+    plt.plot(
+    x, monohigh2[:,80],'r',
+    x, monohigh4[:,80],'b')
+    plt.ylabel(str(i)) 
+    plt.show()
