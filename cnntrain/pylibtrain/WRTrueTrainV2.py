@@ -1,4 +1,10 @@
 # changed sunday 11: Autoencoder module for instant depth determination
+import tensorflow as tf
+# add to the top of your code under import tensorflow as tf
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+
 from tensorflow.keras import layers
 import numpy as np
 import os
@@ -11,7 +17,6 @@ from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import ModelCheckpoint
-import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
 
