@@ -24,8 +24,8 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/headscans/'
-IMAGECOUNT = len(os.listdir(inputFolder))
+inputFolder = '/home/samir/Desktop/blender/pycode/neuralscans/spheres/'
+IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
 def make_grayscale(img):
@@ -304,7 +304,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 1, 1):
+for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder + '/render' + str(i)+'/image0.png'
@@ -321,6 +321,6 @@ for i in range(0, 1, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-800-WUN-50-V2.h5', save_format='h5')
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-800-WUN-50-V2.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN30-800-WUN-50-V2.png',
             (1.0*combotot).astype(np.uint8))
