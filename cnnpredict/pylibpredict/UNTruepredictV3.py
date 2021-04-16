@@ -8,6 +8,10 @@ import math
 import os.path
 from os import path
 import tensorflow as tf
+# add to the top of your code under import tensorflow as tf
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
 import tensorflow.keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential, Model
