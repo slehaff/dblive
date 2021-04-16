@@ -10,7 +10,7 @@ import numpy as np
 import os
 import cv2
 import pandas as pd
-
+import tkinter
 
 import tensorflow.keras
 from tensorflow.keras.models import Sequential, Model
@@ -29,8 +29,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 30
-inputFolder = '/home/samir/Desktop/blender/pycode/neuralscans/spheres/'
+EPOCHS = 10
+inputFolder = '/home/samir/Desktop/blender/pycode/30train400T/'
 IMAGECOUNT = len(os.listdir(inputFolder))
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
@@ -264,12 +264,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-70.h5')
+        '/home/samir/dblive/cnnpredict/models/UN30models/UN30-UNW-800TF-70.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -364,5 +364,5 @@ for i in range(0, 90, 1):
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
 # model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-100.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-UNW-800TF-100.png',
+cv2.imwrite('validate/'+'UN30-UNW-400T-30.png',
             (1.0*combotot).astype(np.uint8))

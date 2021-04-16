@@ -19,7 +19,7 @@ from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 from PIL import Image
-
+import tkinter
 from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
@@ -28,8 +28,8 @@ from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/30train400T'
+EPOCHS = 50
+inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -327,5 +327,4 @@ for i in range(0, 90, 1):
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
 # model.save('/home/samir/dblive/cnnpredict/models/UN30models/UN30-800-WUN-50-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-800-WUN-50-V2.png',
-            (1.0*combotot).astype(np.uint8))
+cv2.imwrite('validate/'+'UN30-800-WUN-30-V2.png',(1.0*combotot).astype(np.uint8))
