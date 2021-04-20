@@ -24,11 +24,14 @@ from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
+import keras
+from datetime import datetime
+from packaging import version
 
 H = 160
 W = 160
 
-EPOCHS = 50
+EPOCHS = 25
 inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
@@ -246,6 +249,16 @@ def load_model():
 
 # model = load_model()
 
+
+#########################################################################################################
+######################################### TensorBoard ###################################################
+
+logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+
+##########################################################################################################
+
+
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
 
@@ -259,7 +272,9 @@ def fct_train(model):
                                  batch_size=1,
                                  epochs=1,
                                  validation_split=0.2,
-                                 callbacks=[checkpointer])
+                                #  callbacks=[checkpointer])
+                                 callbacks=[tensorboard_callback, checkpointer])
+
         loss.append(history_temp.history['loss'][0])
         val_loss.append(history_temp.history['val_loss'][0])
         # convweights.append(model.layers[0].get_weights()[0].squeeze())
