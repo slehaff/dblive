@@ -149,18 +149,18 @@ def unw_debug(low_f_file, high_f_file, folder, start, stop, step):
 
 
 def makeDDbase(count):
-    print('coldepthplanes')
+    print('15depthplanes')
     phibase = np.zeros((rheight, rwidth,count), dtype=np.float64)
     for u in range(rwidth):
         for v in range(rheight):
             print('u=', u, 'v=', v)
             for i in range(count):
                 # print('i=',i)
-                folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/render'+ str(i)+'/'
+                folder = '/home/samir/Desktop/blender/pycode/15depthplanes/render'+ str(i)+'/'
                 unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
                 unwrap = np.load(folder+'unwrap.npy')   
                 phibase[u,v,i] = unwrap[u,v]
-    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/'
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
     wr_save = folder + 'DDbase.npy'
     np.save(wr_save, phibase, allow_pickle=False)
 
@@ -194,7 +194,7 @@ def makeDepth(folder, basecount):
     
 
 def newDepth(folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/coldepthplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/15depthplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'unwrap.npy' )
     mask = np.load(folder+'mask.npy' )
@@ -221,7 +221,7 @@ def newDepth(folder, basecount):
                 # print(i,j,unwrap[i,j],DBase[i,j,s])
                 if zee == 0:
                     print('not found')
-                depth[i,j]= (zee/250*-25 + 40)*1
+                depth[i,j]= (zee/200*-20 + 40)*1
 
     # print('depth:', np.amax(depth), np.amin(depth))
     print('nndepthrange=', np.ptp(depth), np.max(depth), np.min(depth) )
@@ -394,20 +394,20 @@ def getplys(infolder ):
 
 
 def mydepth():
-    folder = '/home/samir/Desktop/blender/pycode/coldepthplanes/'
-    unw(folder,250)
-    makeDDbase(250)
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+    unw(folder,200)
+    makeDDbase(200)
 # Run multiphasewrap on the sim output prior to unwrapping
 # mydepth()
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/target15/'
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
     count=  len(os.listdir(folder))
     print(count)
 
     unw(folder, count)
-    depth(folder, count, 250)
+    depth(folder, count, 200)
     makeclouds(folder, count)
     
     # getplys(folder)
