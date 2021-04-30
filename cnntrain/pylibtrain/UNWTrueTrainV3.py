@@ -35,7 +35,7 @@ H = 160
 W = 160
 
 EPOCHS = 12
-inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 tf.config.LogicalDeviceConfiguration(
@@ -280,7 +280,7 @@ def load_model():
     return(model)
 
 
-model = load_model()
+# model = load_model()
 #########################################################################################################
 ######################################### TensorBoard ###################################################
 
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNW-800TF-120.png',
+# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-551-b8-12.png',
             (1.0*combotot).astype(np.uint8))
