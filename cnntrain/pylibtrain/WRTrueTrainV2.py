@@ -31,7 +31,7 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 10
+EPOCHS = 5
 inputFolder = '/home/samir/Desktop/blender/pycode/target15'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 

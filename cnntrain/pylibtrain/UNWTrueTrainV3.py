@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-800TF-24.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-108.h5')
     model.summary()
     return(model)
 
@@ -384,4 +384,6 @@ for i in range(0, 90, 1):
     combotot = np.concatenate((combotot, combo), axis=0)
 model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-800TF-36.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN15-UNW-800TF-36.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-800TF-120.png',
             (1.0*combotot).astype(np.uint8))

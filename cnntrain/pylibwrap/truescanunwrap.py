@@ -148,19 +148,32 @@ def unw_debug(low_f_file, high_f_file, folder, start, stop, step):
     # cv2.imwrite(folder + 'kdata.png', np.multiply(2*PI,kdata))
 
 
+<<<<<<< HEAD
 def makeDDbase(count):
     print('15depthplanes')
+=======
+def makeDDbase(infolder,count):
+    print(infolder)
+>>>>>>> 9b38686f08bb78ed27fe53eb7263fbdf2bf59a7e
     phibase = np.zeros((rheight, rwidth,count), dtype=np.float64)
     for u in range(rwidth):
         for v in range(rheight):
             print('u=', u, 'v=', v)
             for i in range(count):
                 # print('i=',i)
+<<<<<<< HEAD
                 folder = '/home/samir/Desktop/blender/pycode/15depthplanes/render'+ str(i)+'/'
                 unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
                 unwrap = np.load(folder+'unwrap.npy')   
                 phibase[u,v,i] = unwrap[u,v]
     folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+=======
+                folder = '/home/samir/Desktop/blender/pycode/'+ infolder +'/render'+ str(i)+'/'
+                unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
+                unwrap = np.load(folder+'unwrap.npy')   
+                phibase[u,v,i] = unwrap[u,v]
+    folder = '/home/samir/Desktop/blender/pycode/'+ infolder+'/'
+>>>>>>> 9b38686f08bb78ed27fe53eb7263fbdf2bf59a7e
     wr_save = folder + 'DDbase.npy'
     np.save(wr_save, phibase, allow_pickle=False)
 
@@ -380,12 +393,12 @@ def makeclouds(myfolder, count):
             # generate_pointcloud(folder + 'blendertexture.png', folder + '5mask.png', folder + 'kdata.png', folder +'pointcl-k.ply')
             # generate_pointcloud(folder + 'blendertexture.png', folder + '5mask.png', folder + 'unwrap2.png', folder +'pointcl-2.ply')
 
-def getplys(infolder ):       
-    count=len(os.listdir(infolder))
-    for i in range(count):
-        print(count)
-        shutil.copyfile(infolder+'/render'+str(i)+'/pointcl-depth.ply', infolder +'files/plyfolder/points'+str(i)+'.ply')
-        shutil.copyfile(infolder+'/render'+str(i)+'/image8.png', infolder +'files/imgfolder/image'+str(i)+'.png')
+# def getplys(infolder ):       
+#     count=len(os.listdir(infolder))
+#     for i in range(count):
+#         print(count)
+#         shutil.copyfile(infolder+'/render'+str(i)+'/pointcl-depth.ply', infolder +'files/plyfolder/points'+str(i)+'.ply')
+#         shutil.copyfile(infolder+'/render'+str(i)+'/image8.png', infolder +'files/imgfolder/image'+str(i)+'.png')
         
 
 
@@ -398,7 +411,7 @@ def mydepth():
     unw(folder,200)
     makeDDbase(200)
 # Run multiphasewrap on the sim output prior to unwrapping
-# mydepth()
+# builddepth()
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
