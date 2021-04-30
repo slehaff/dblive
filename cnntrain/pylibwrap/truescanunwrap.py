@@ -215,7 +215,7 @@ def newDepth(folder, basecount):
                         break
                     else:
                         s+=1
-                        if s==250:
+                        if s==200:
                             print('not found!')
 
                 # print(i,j,unwrap[i,j],DBase[i,j,s])

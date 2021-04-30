@@ -31,8 +31,8 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 25
-inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF'
+EPOCHS = 10
+inputFolder = '/home/samir/Desktop/blender/pycode/target15'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -341,5 +341,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UN30models/UN30-800-WUN-50-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-800-WUN-30-V2.png',(1.0*combotot).astype(np.uint8))
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-360-WUN-50-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN30-360-WUN-25-V0.png',(1.0*combotot).astype(np.uint8))

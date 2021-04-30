@@ -34,8 +34,8 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 10
-inputFolder = '/home/samir/Desktop/blender/pycode/30train400T/'
+EPOCHS = 12
+inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 tf.config.LogicalDeviceConfiguration(
@@ -159,44 +159,44 @@ print(len(wrap_images))
 
 inputImage = Input(shape=(H,W,1))
 
-A1 = Conv2D(32,(3,3), padding='same')(inputImage)
+A1 = Conv2D(16,(3,3), padding='same')(inputImage)
 A2 = Activation('relu')(A1)
-A3 = Conv2D(32,(3,3), padding='same')(A2)
+A3 = Conv2D(16,(3,3), padding='same')(A2)
 A4 = Activation('relu')(A3)
 print(A4.shape)
 
 A5 = MaxPooling2D(pool_size=(2,2), strides=None, padding='same')(A4)
-A6 = Conv2D(64,(3,3), padding='same')(A5)
+A6 = Conv2D(32,(3,3), padding='same')(A5)
 A7 = Activation('relu')(A6)
-A8 = Conv2D(64,(3,3), padding='same')(A7)
+A8 = Conv2D(32,(3,3), padding='same')(A7)
 A9 = Activation('relu')(A8)
 print(A9.shape)
 
 A10 = MaxPooling2D(pool_size=(2,2), strides=None, padding='same')(A9)
-A11 = Conv2D(128,(3,3), padding='same')(A10)
+A11 = Conv2D(64,(3,3), padding='same')(A10)
 A12 = Activation('relu')(A11)
-A13 = Conv2D(128,(3,3), padding='same')(A12)
+A13 = Conv2D(64,(3,3), padding='same')(A12)
 A14 = Activation('relu')(A13)
 print(A14.shape)
 
 A15 = MaxPooling2D(pool_size=(2,2), strides=None, padding='same')(A14)
-A16 = Conv2D(256,(3,3), padding='same')(A15)
+A16 = Conv2D(128,(3,3), padding='same')(A15)
 A17 = Activation('relu')(A16)
-A18 = Conv2D(256,(3,3), padding='same')(A17)
+A18 = Conv2D(128,(3,3), padding='same')(A17)
 A19 = Activation('relu')(A18)
 print(A19.shape)
 
 A20 = MaxPooling2D(pool_size=(2,2), strides=None, padding='same')(A19)
-A21 = Conv2D(512,(3,3), padding='same')(A20)
+A21 = Conv2D(256,(3,3), padding='same')(A20)
 A22 = Activation('relu')(A21)
-A23 = Conv2D(512,(3,3), padding='same')(A22)
+A23 = Conv2D(256,(3,3), padding='same')(A22)
 A24 = Activation('relu')(A23)
 print(A24.shape)
 
 A25 = MaxPooling2D(pool_size=(2,2), strides=None, padding='same')(A24)
-A26 = Conv2D(1024,(3,3), padding='same')(A25)
+A26 = Conv2D(512,(3,3), padding='same')(A25)
 A27 = Activation('relu')(A26)
-A28 = Conv2D(1024,(3,3), padding='same')(A27)
+A28 = Conv2D(512,(3,3), padding='same')(A27)
 A29 = Activation('relu')(A28)
 print(A29.shape)
 
@@ -204,46 +204,46 @@ print(A29.shape)
 
 A30 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A29)
 C1  = concatenate([A30,A24], axis = 3)
-A31 = Conv2D(512,(3,3), padding='same')(C1)
+A31 = Conv2D(256,(3,3), padding='same')(C1)
 A32 = Activation('relu')(A31)
 A33 = add([A24, A32])
-A34 = Conv2D(512,(3,3), padding='same')(A33)
+A34 = Conv2D(256,(3,3), padding='same')(A33)
 A35 = Activation('relu')(A34)
 print(A35.shape)
 
 A36 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A35)
 C2  = concatenate([A36,A19], axis = 3)
-A37 = Conv2D(256,(3,3), padding='same')(C2)
+A37 = Conv2D(128,(3,3), padding='same')(C2)
 A38 = Activation('relu')(A37)
 A39 = add([A19, A38])
-A40 = Conv2D(256,(3,3), padding='same')(A39)
+A40 = Conv2D(128,(3,3), padding='same')(A39)
 A41 = Activation('relu')(A40)
 print(A41.shape)
 
 A42 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A41)
 C3  = concatenate([A42,A14], axis = 3)
-A43 = Conv2D(128,(3,3), padding='same')(C3)
+A43 = Conv2D(64,(3,3), padding='same')(C3)
 A44 = Activation('relu')(A43)
 A45 = add([A14, A44])
-A46 = Conv2D(128,(3,3), padding='same')(A45)
+A46 = Conv2D(64,(3,3), padding='same')(A45)
 A47 = Activation('relu')(A46)
 print(A47.shape)
 
 A48 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A47)
 C4  = concatenate([A48,A9], axis = 3)
-A49 = Conv2D(64,(3,3), padding='same')(C4)
+A49 = Conv2D(32,(3,3), padding='same')(C4)
 A50 = Activation('relu')(A49)
 A51 = add([A9, A50])
-A52 = Conv2D(64,(3,3), padding='same')(A51)
+A52 = Conv2D(32,(3,3), padding='same')(A51)
 A53 = Activation('relu')(A52)
 print(A53.shape)
 
 A54 = UpSampling2D(size=(2,2), data_format=None, interpolation='nearest')(A53)
 C5  = concatenate([A54,A4], axis = 3)
-A55 = Conv2D(32,(3,3), padding='same')(C5)
+A55 = Conv2D(16,(3,3), padding='same')(C5)
 A56 = Activation('relu')(A55)
 A57 = add([A4, A56])
-A58 = Conv2D(32,(3,3), padding='same')(A57)
+A58 = Conv2D(16,(3,3), padding='same')(A57)
 A59 = Activation('relu')(A58)
 print(A59.shape)
 # Output Conv2D(1)
@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN30models/UN30-UNW-800TF-70.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-800TF-24.h5')
     model.summary()
     return(model)
 
@@ -297,7 +297,7 @@ def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
         history_temp = model.fit(wrap_images, unwrap_images,
-                                 batch_size=4,
+                                 batch_size=8,
                                  epochs=1,
                                  validation_split=0.2,
                                 #  callbacks=[tensorboard_callback, checkpointer])
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-100.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-UNW-400T-30.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-800TF-36.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-800TF-36.png',
             (1.0*combotot).astype(np.uint8))
