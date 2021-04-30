@@ -148,19 +148,32 @@ def unw_debug(low_f_file, high_f_file, folder, start, stop, step):
     # cv2.imwrite(folder + 'kdata.png', np.multiply(2*PI,kdata))
 
 
+<<<<<<< HEAD
+def makeDDbase(count):
+    print('15depthplanes')
+=======
 def makeDDbase(infolder,count):
     print(infolder)
+>>>>>>> 9b38686f08bb78ed27fe53eb7263fbdf2bf59a7e
     phibase = np.zeros((rheight, rwidth,count), dtype=np.float64)
     for u in range(rwidth):
         for v in range(rheight):
             print('u=', u, 'v=', v)
             for i in range(count):
                 # print('i=',i)
+<<<<<<< HEAD
+                folder = '/home/samir/Desktop/blender/pycode/15depthplanes/render'+ str(i)+'/'
+                unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
+                unwrap = np.load(folder+'unwrap.npy')   
+                phibase[u,v,i] = unwrap[u,v]
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+=======
                 folder = '/home/samir/Desktop/blender/pycode/'+ infolder +'/render'+ str(i)+'/'
                 unwrap = np.zeros((rheight, rwidth), dtype=np.float64)
                 unwrap = np.load(folder+'unwrap.npy')   
                 phibase[u,v,i] = unwrap[u,v]
     folder = '/home/samir/Desktop/blender/pycode/'+ infolder+'/'
+>>>>>>> 9b38686f08bb78ed27fe53eb7263fbdf2bf59a7e
     wr_save = folder + 'DDbase.npy'
     np.save(wr_save, phibase, allow_pickle=False)
 
@@ -393,10 +406,10 @@ def makeclouds(myfolder, count):
 
 
 
-def builddepth(infolder):
-    folder = '/home/samir/Desktop/blender/pycode/'+ infolder+'/'
+def mydepth():
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
     unw(folder,200)
-    makeDDbase(infolder,200)
+    makeDDbase(200)
 # Run multiphasewrap on the sim output prior to unwrapping
 # builddepth()
 
@@ -407,7 +420,7 @@ def myrun():
     print(count)
 
     unw(folder, count)
-    depth(folder, count, 250)
+    depth(folder, count, 200)
     makeclouds(folder, count)
     
     # getplys(folder)
