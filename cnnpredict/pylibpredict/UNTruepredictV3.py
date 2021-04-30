@@ -441,7 +441,7 @@ def makeclouds(scanfolder, count):
             # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png', folder + 'nnkunwrap.png', folder +'pointcl-unw.ply')
             generate_pointcloud(folder + 'image9.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
 
-
+def process_scan()
 
 ####################################################################################################################
 
