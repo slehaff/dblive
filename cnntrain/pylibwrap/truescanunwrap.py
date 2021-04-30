@@ -194,7 +194,7 @@ def makeDepth(folder, basecount):
     
 
 def newDepth(folder, basecount):
-    basefile = '/home/samir/Desktop/blender/pycode/coldepthplanes/DDbase.npy'
+    basefile = '/home/samir/Desktop/blender/pycode/15depthplanes/DDbase.npy'
     DBase = np.load(basefile)
     unwrap = np.load(folder+'unwrap.npy' )
     mask = np.load(folder+'mask.npy' )
@@ -215,13 +215,13 @@ def newDepth(folder, basecount):
                         break
                     else:
                         s+=1
-                        if s==250:
+                        if s==200:
                             print('not found!')
 
                 # print(i,j,unwrap[i,j],DBase[i,j,s])
                 if zee == 0:
                     print('not found')
-                depth[i,j]= (zee/250*-25 + 40)*1
+                depth[i,j]= (zee/200*-20 + 40)*1
 
     # print('depth:', np.amax(depth), np.amin(depth))
     print('nndepthrange=', np.ptp(depth), np.max(depth), np.min(depth) )
@@ -402,7 +402,7 @@ def builddepth(infolder):
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/neuralscans/spheres/'
+    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
     count=  len(os.listdir(folder))
     print(count)
 

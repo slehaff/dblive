@@ -34,8 +34,8 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 10
-inputFolder = '/home/samir/Desktop/blender/pycode/30train400T/'
+EPOCHS = 12
+inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 tf.config.LogicalDeviceConfiguration(
@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN30models/UN30-UNW-800TF-70.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-108.h5')
     model.summary()
     return(model)
 
@@ -297,7 +297,7 @@ def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
         history_temp = model.fit(wrap_images, unwrap_images,
-                                 batch_size=4,
+                                 batch_size=8,
                                  epochs=1,
                                  validation_split=0.2,
                                 #  callbacks=[tensorboard_callback, checkpointer])
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-100.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN30-UNW-400T-30.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-800TF-120.png',
             (1.0*combotot).astype(np.uint8))

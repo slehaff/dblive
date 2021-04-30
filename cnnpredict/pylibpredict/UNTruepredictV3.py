@@ -78,7 +78,7 @@ def load_H_model():
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN30models/UN30-UNW-800TF-70.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5')
     return(model)
 
 def makemonohigh(folder):
