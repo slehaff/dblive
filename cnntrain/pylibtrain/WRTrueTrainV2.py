@@ -31,8 +31,8 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 5
-inputFolder = '/home/samir/Desktop/blender/pycode/target15'
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -269,7 +269,7 @@ def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
         history_temp = model.fit(fringe_images, hwrap_images,
-                                 batch_size=1,
+                                 batch_size=4,
                                  epochs=1,
                                  validation_split=0.2,
                                 #  callbacks=[checkpointer])
@@ -341,5 +341,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UN30models/UN30-800-WUN-50-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-360-WUN-05-V2.png',(1.0*combotot).astype(np.uint8))
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-b8-Wrap-100-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-551-Wrap-b8-100-V2.png',(1.0*combotot).astype(np.uint8))
