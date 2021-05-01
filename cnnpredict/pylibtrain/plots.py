@@ -67,7 +67,7 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(0,10):
+for i in range(100,160):
     folder1 = '/home/samir/Desktop/blender/pycode/15trainMan/render'+ str(i)
     folder2 = '/home/samir/Desktop/blender/pycode/15trainMan/render'+str(i)
 
@@ -83,7 +83,7 @@ for i in range(0,10):
     print('unwrange=', np.ptp(monohigh1), np.max(monohigh1), np.min(monohigh1) )
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnunwrap.npy'
+    high1 = folder1 + '/unwrap.npy'
     print(high1)
     # colorhigh = cv2.imread(high1, 1)
     # monohigh3 = make_grayscale(colorhigh)
@@ -102,7 +102,7 @@ for i in range(0,10):
     
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnunwrap.png'
+    high1 = folder1 + '/unwrap.png'
     print(high1)
     colorhigh = cv2.imread(high1, 1)
     monohigh4 = make_grayscale(colorhigh)
@@ -121,11 +121,11 @@ for i in range(0,10):
     # monohigh4 = make_grayscale(colorhigh)
     # monohigh4 = 255*normalize_image(monohigh4)
 
-    plt.plot(
-    x, monohigh1[:,80],'g',
-    x, monohigh3[:,80],'y')
-    plt.ylabel(str(i)) 
-    plt.show()
+    # plt.plot(
+    # x, monohigh1[:,80],'g',
+    # x, monohigh3[:,80],'y')
+    # plt.ylabel(str(i)) 
+    # plt.show()
     plt.plot(
     x, monohigh2[:,80],'r',
     x, monohigh4[:,80],'b')

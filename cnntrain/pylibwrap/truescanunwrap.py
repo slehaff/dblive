@@ -396,13 +396,15 @@ def makeclouds(myfolder, count):
 def mydepth():
     folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
     unw(folder,200)
-    makeDDbase(200)
-# Run multiphasewrap on the sim output prior to unwrapping
-makeDDbase('15depthplanes', 200)
+    # makeDDbase(200)
+    # Run multiphasewrap on the sim output prior to unwrapping
+    makeDDbase('15depthplanes', 200)
+# mydepth()
+
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+    folder = '/home/samir/Desktop/blender/pycode/15trainMan/'
     count=  len(os.listdir(folder))
     print(count)
 
@@ -412,7 +414,7 @@ def myrun():
     
     # getplys(folder)
 
-# myrun()
+myrun()
 
 
 def debug():
