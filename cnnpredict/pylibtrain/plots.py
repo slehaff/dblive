@@ -68,8 +68,8 @@ def makemonohigh(folder):
 
 x = range(160)
 for i in range(0,10):
-    folder1 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+str(i)
+    folder1 = '/home/samir/Desktop/blender/pycode/15trainMan/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/15trainMan/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 

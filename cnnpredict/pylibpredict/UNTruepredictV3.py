@@ -73,12 +73,12 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN30models/UN30-400-WUN-100-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-b8-Wrap-100-V2.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UN30-UNW-800TF-120.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-b8-300.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -441,13 +441,13 @@ def makeclouds(scanfolder, count):
             # generate_pointcloud(folder + 'blendertexture.png', folder + '-1mask.png', folder + 'nnkunwrap.png', folder +'pointcl-unw.ply')
             generate_pointcloud(folder + 'image9.png', folder + 'mask.png', folder + 'nndepth.png', folder +'pointcl-nndepth.ply')
 
-def process_scan()
+
 
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
+bfolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 
 
 Lmodel = load_L_model()
