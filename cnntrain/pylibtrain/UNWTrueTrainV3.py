@@ -34,7 +34,7 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 200
+EPOCHS = 25
 inputFolder = '/home/samir/Desktop/blender/pycode/15trainMat/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-340-mat-b8-300.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-680-mat-b8-150.h5')
     model.summary()
     return(model)
 
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-340-mat-b8-500.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNW-340-mat-b8-500.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-680-mat-b8-175.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-680-mat-b8-175.png',
             (1.0*combotot).astype(np.uint8))
