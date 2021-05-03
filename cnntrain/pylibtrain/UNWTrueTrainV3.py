@@ -34,7 +34,7 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 25
+EPOCHS = 50
 inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
@@ -257,7 +257,7 @@ UModel.summary()
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = optimizers.SGD(lr=1e-6, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss='mean_squared_error',
                   metrics=['mse'])
     model.summary()
@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-680-mat-b8-150.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-250.h5')
     model.summary()
     return(model)
 
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-680-mat-b8-175.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNW-680-mat-b8-175.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-551-man-b8-300.png',
             (1.0*combotot).astype(np.uint8))
