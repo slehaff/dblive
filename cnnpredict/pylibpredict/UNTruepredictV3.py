@@ -446,11 +446,11 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
-bfolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
+folder = '/home/samir/Desktop/blender/pycode/inputscans1/render'
+bfolder = '/home/samir/Desktop/blender/pycode/inputscans1/'
 
 
-Lmodel = load_L_model()
+# Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 for i in range(len(os.listdir(bfolder))-1):
@@ -463,10 +463,10 @@ for i in range(len(os.listdir(bfolder))-1):
     # makemonohigh(folder+'i')
 
     nnHprocess(folder + str(i)+'/')
-    nnLprocess(folder + str(i)+'/')
+    # nnLprocess(folder + str(i)+'/')
     # unwrap_k(folder + str(i)+'/')
-    newDepth(folder+ str(i)+'/' , 250)
-    nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
+    # newDepth(folder+ str(i)+'/' , 250)
+    # nngenerate_pointcloud(folder+str(i) +'/'+ 'image8.png', folder+str(i) +'/'+ 'mask.png', folder+str(i)+'/' + 'nndepth.npy', folder+str(i)+'/' +'pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
 

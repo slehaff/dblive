@@ -35,7 +35,7 @@ H = 160
 W = 160
 
 EPOCHS = 25
-inputFolder = '/home/samir/Desktop/blender/pycode/15trainMat/'
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))
 
 tf.config.LogicalDeviceConfiguration(
