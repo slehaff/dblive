@@ -13,18 +13,18 @@ def make_grayscale(img):
 
 bfolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 
-for i in range(0,len(os.listdir(bfolder)), 40):
+for i in range(0,len(os.listdir(bfolder)), 20):
     print(i)
     folder = bfolder +'render'+ str(i)
     print(folder)
-    f1 = folder + '/depth.png'
+    f1 = folder + '/unwrap.png'
     imganal = cv2.imread(f1, 1)
     imganal = make_grayscale(imganal)
 
-    f2 = folder + '/nndepth.png'
+    f2 = folder + '/nnunwrap.png'
     imgnn = cv2.imread(f2, 1)
     imgnn = make_grayscale(imgnn)
 
-    dif = np.abs(imgnn-imganal)
+    dif = np.abs(imgnn-imganal)*100
     heatmap = sb.heatmap(dif)
     plt.show()
