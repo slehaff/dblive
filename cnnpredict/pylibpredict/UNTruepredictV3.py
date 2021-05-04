@@ -73,7 +73,7 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-680-mat-b8-Wrap-100-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-b8-Wrap-100-V2.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
@@ -446,8 +446,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/spheres/render'
-bfolder = '/home/samir/Desktop/blender/pycode/spheres/'
+folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
 
 
 Lmodel = load_L_model()
