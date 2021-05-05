@@ -35,7 +35,7 @@ H = 160
 W = 160
 
 EPOCHS = 30
-inputFolder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 tf.config.LogicalDeviceConfiguration(
@@ -137,10 +137,10 @@ def to_npy_array(folder_path, array, file_count):
 
 # Load and pre-process the training data
 wrap_images = []
-unwrap_images = []
+kwrap_images = []
 #========================================= Use with dblive folder structure ===============================
 to_aug_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
-to_aug_png_array(inputFolder+'render', 'unwrap' , unwrap_images, IMAGECOUNT)
+to_aug_png_array(inputFolder+'render', 'kdata' , kwrap_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -149,9 +149,9 @@ to_aug_png_array(inputFolder+'render', 'unwrap' , unwrap_images, IMAGECOUNT)
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
 wrap_images = np.expand_dims(wrap_images, -1)
-unwrap_images = np.expand_dims(unwrap_images, -1)
+unwrap_images = np.expand_dims(kwrap_images, -1)
 print("input shape: {}".format(wrap_images.shape))
-print("output shape: {}".format(unwrap_images.shape))
+print("output shape: {}".format(kwrap_images.shape))
 print(len(wrap_images))
 
 
@@ -280,7 +280,7 @@ def load_model():
     return(model)
 
 
-model = load_model()
+# model = load_model()
 #########################################################################################################
 ######################################### TensorBoard ###################################################
 
@@ -374,7 +374,7 @@ for i in range(0, 90, 1):
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/unwrap.png'
+    myfile = inputFolder+'render' + str(i)+'/kdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-330.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNW-200-depth-b8-30.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNWK-551-man-planes-b8-30.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNWK-551-depth-b8-30.png',
             (1.0*combotot).astype(np.uint8))

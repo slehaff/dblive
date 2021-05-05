@@ -1,33 +1,49 @@
 # changed sunday 11: Autoencoder module for instant depth determination
+import tensorflow as tf
+# add to the top of your code under import tensorflow as tf
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+
 from tensorflow.keras import layers
 import numpy as np
 import os
 import cv2
 import pandas as pd
-import keras_preprocessing
+import tkinter
+
 import tensorflow.keras
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import ModelCheckpoint
-import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
+import keras
 
-from tensorflow.keras.layers import Layer, InputSpec
-from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Reshape
+from tensorflow.python.keras.layers import Layer, InputSpec
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add, concatenate
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
-from tensorflow.keras.metrics import MeanIoU
+
+from datetime import datetime
+from packaging import version
+
+
 
 H = 160
 W = 160
-N = 18 # Number of classes corresponds to hfwrap periods
 
-EPOCHS = 5
+EPOCHS = 30
 inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
-IMAGECOUNT = 100 #len(os.listdir(inputFolder))
-nclasses = 18 # Still number of classes
+IMAGECOUNT = len(os.listdir(inputFolder))-2
+
+tf.config.LogicalDeviceConfiguration(
+    memory_limit=2000, experimental_priority=0
+)
+
+# gpu_options= tf.GPUOptions(per_process_gpu_memory_fraction=.333)
+# sess=tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -50,7 +66,6 @@ def normalize_image255(img):
 
 def normalize_image(img):
     # Normalizes the input image to range (0, 1) for visualization
-    print(np.max(img), np.min(img))
     img = img - np.min(img)
     img = img/np.max(img)
     return img
@@ -78,38 +93,26 @@ def to_png_array(folder_path, filename, array, file_count):
         img = normalize_image255(img)
         inp_img = make_grayscale(img)
         array.append(inp_img)
-    return   
 
+    return  
 
-def to_kdens_class_array(folder_path, filename, array, file_count):
+def to_aug_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
         print('count:', i)
         myfile = folder_path + str(i)+'/'+ filename + '.png'
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
-        img = normalize_image(img)
-        print(np.max(img))
-        inp_img = (N-1)*make_grayscale(img)
-        print(np.max(inp_img))
-
-        print(folder_path)
-
-        denscl = np.zeros((H,W), dtype= np.int16)
-        print(img.size)
-        for u in range(0,W):
-            for v in range(0,H):
-                dcl=int(np.round(inp_img[u,v]))
-                denscl[u,v]=dcl
-                # if v==0:
-                #     print(dcl)
-        savename =folder_path + str(i)+'/'+ filename[:-4]+'class.png'
-        print(savename)
-        cv2.imwrite(savename,img)
-
-        array.append(denscl)
-        print('kdens shape:', denscl.shape, denscl[159,159])
-    return  
+        img = normalize_image255(img)
+        inp_img = make_grayscale(img)
+        array.append(inp_img)
+        f1img = cv2.flip(inp_img,0)
+        array.append(f1img)
+        f1img = cv2.flip(inp_img,1)
+        array.append(f1img)
+        f1img = cv2.flip(inp_img,-1)
+        array.append(f1img)
+    return   
 
 
 def to_new_npy_array(folder_path, filename, array, file_count):
@@ -132,38 +135,12 @@ def to_npy_array(folder_path, array, file_count):
     return
 
 
-
-def densclass(filename):
-    densclass = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-    print(filename)
-    img = np.zeros((H, W), dtype=np.float64)
-    img = cv2.imread(filename)
-    denscl = np.zeros((H,W), dtype= np.int16)
-    print(img.size)
-    for u in range(0,W):
-        for v in range(0,H):
-            dcl=int(np.round(img[u,v][0]/N))
-            denscl[u,v]=densclass[dcl]
-    savename = filename[:-4]+'class.png'
-    print(savename)
-    cv2.imwrite(savename,img)
-
-
-def undensclass(denscl):
-
-    img = np.zeros((H, W), dtype=np.float64)
-    for u in range(0,W):
-        for v in range(0,H):
-            img[u,v]=denscl[u,v][2]/nclasses*255
-    return(img)
-
-
 # Load and pre-process the training data
 wrap_images = []
-k_images = []
+unwrap_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
-to_kdens_class_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
+to_aug_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_aug_png_array(inputFolder+'render', 'unwrap' , unwrap_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
@@ -172,10 +149,9 @@ to_kdens_class_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
 wrap_images = np.expand_dims(wrap_images, -1)
-k_images = np.expand_dims(k_images, -1)
-print('k_images shape:', k_images.shape)
+unwrap_images = np.expand_dims(unwrap_images, -1)
 print("input shape: {}".format(wrap_images.shape))
-# print("output shape: {}".format(nom_images.shape))
+print("output shape: {}".format(unwrap_images.shape))
 print(len(wrap_images))
 
 
@@ -272,15 +248,7 @@ A59 = Activation('relu')(A58)
 print(A59.shape)
 # Output Conv2D(1)
 outputImage = Conv2D(1, (3, 3), padding='same')(A59)
-outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1))(outputImage)
-outputImage = Conv2D(filters=nclasses, kernel_size=(1, 1), activation= 'softmax')(outputImage)
 
-# outputImage[2][0] = tf.math.argmax(outputImage[2])
-# outputImage = Reshape((H*W,nclasses), input_shape= (H,W,nclasses))(outputImage)
-# outputImage = Dense(N, activation= 'softmax' )(outputImage)
-# outputImage = Activation('softmax')(outputImage)
-# print(tf.math.argmax(outputImage, 2))
-print('out2 shape:',outputImage.shape)
 
 UModel = Model(inputImage, outputImage)
 UModel.summary()
@@ -289,9 +257,9 @@ UModel.summary()
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    # sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer='adam', loss = tf.keras.losses.SparseCategoricalCrossentropy(),
-                  metrics=['sparse_categorical_accuracy'])#, tf.keras.metrics.MeanIoU(name='iou', num_classes=nclasses)])
+    sgd = optimizers.SGD(lr=1e-6, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(optimizer='adam', loss='mean_squared_error',
+                  metrics=['mse'])
     model.summary()
     return(model)
 
@@ -307,12 +275,19 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V4.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
+#########################################################################################################
+######################################### TensorBoard ###################################################
+
+logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=logdir)
+
+##########################################################################################################
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
@@ -321,10 +296,11 @@ checkpointer = ModelCheckpoint(
 def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
-        history_temp = model.fit(wrap_images, k_images,
-                                 batch_size=4,
+        history_temp = model.fit(wrap_images, unwrap_images,
+                                 batch_size=8,
                                  epochs=1,
                                  validation_split=0.2,
+                                #  callbacks=[tensorboard_callback, checkpointer])
                                  callbacks=[checkpointer])
         loss.append(history_temp.history['loss'][0])
         val_loss.append(history_temp.history['val_loss'][0])
@@ -345,59 +321,67 @@ def plot():
     plt.ylabel('loss')
     plt.legend(['Training loss', 'Validation loss'], loc='upper right')
     plt.show()
-    # plt.savefig('trainingvalidationlossgx.png')
+    plt.savefig('trainingvalidationlossgx.png')
 
 
 plot()
 
+def shiftzright(img):
+    for u in range(W):
+        for v in range(H):
+            a = int(img[u,v])
+            a = a >>1
+            a = a <<1
+            img[u,v] = a
+
+    return(img)
+
 
 def combImages(i1, i2, i3):
-    print(np.shape(i1))
-    print(np.shape(i2))
-    print(np.shape(i3))
-    # i2 = undensclass(i2)
-    new_img = np.concatenate((i1, i1, i3), axis=1)
+    new_img = np.concatenate((i1, i2, i3), axis=1)
     return(new_img)
 
 
 def DB_predict(i, x, y):
     predicted_img = model.predict(np.array([np.expand_dims(x, -1)]))
     predicted_img = predicted_img.squeeze()
+    predicted_img = 255*predicted_img
+    predicted_img = shiftzright(predicted_img)
+    
     # cv2.imwrite('validate/'+str(i)+'filteredSync.png',
     #             (255.0*predicted_img).astype(np.uint8))
     # cv2.imwrite('validate/'+str(i)+'input.png',
     #             (255.0*x).astype(np.uint8))
-    combo = combImages(255.0*x, 255.0*predicted_img, 255.0*y)
+    combo = combImages(255.0*x, 1.0*predicted_img, 255.0*y)
     cv2.imwrite('validate/test/'+str(i)+'combo.png', (1.0*combo).astype(np.uint8))
     return(combo)
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/unwrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 10, 1):
+for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/kdata.png'
+    myfile = inputFolder+'render' + str(i)+'/unwrap.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
-    # combo[1]= undensclass(combo[1])
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-400-KUN-100-V5.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-test-V5.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-223-man-planes-b8-330.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-200-depth-b8-30.png',
             (1.0*combotot).astype(np.uint8))

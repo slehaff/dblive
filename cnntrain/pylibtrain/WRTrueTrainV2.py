@@ -32,7 +32,7 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15depthplanes'
+inputFolder = '/home/samir/Desktop/blender/pycode/rotplanes'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -224,7 +224,7 @@ UModel.summary()
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = optimizers.SGD(lr=1e-5, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss='mean_squared_error',
                   metrics=['mse'])
     model.summary()
@@ -247,7 +247,7 @@ def load_model():
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 
 #########################################################################################################
@@ -341,5 +341,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-680-mat-b8-Wrap-100-V2.h5', save_format='h5')
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-680-mat-b8-Wrap-200-V2.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN15-200-depth-Wrap-b8-100-V2.png',(1.0*combotot).astype(np.uint8))

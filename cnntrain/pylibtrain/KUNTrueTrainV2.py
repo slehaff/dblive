@@ -24,8 +24,8 @@ from tensorflow.keras.utils import plot_model
 H = 160
 W = 160
 
-EPOCHS = 50
-inputFolder = '/home/samir/Desktop/blender/pycode/30train800TF/'
+EPOCHS = 5
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 
@@ -104,7 +104,7 @@ def to_npy_array(folder_path, array, file_count):
 wrap_images = []
 k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'nnkdata', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
 to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
@@ -303,7 +303,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/nnkdata.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -312,7 +312,7 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/nnkdata.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)

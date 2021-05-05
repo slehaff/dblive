@@ -23,8 +23,8 @@ from keras.layers import Input, Activation, UpSampling2D, add
 H = 160
 W = 160
 
-EPOCHS = 200
-inputFolder = '/home/samir/Desktop/blender/pycode/scans5/'
+EPOCHS = 2
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 
