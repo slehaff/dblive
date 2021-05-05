@@ -78,7 +78,7 @@ def load_H_model():
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-330.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -446,8 +446,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
-bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
+folder = '/home/samir/Desktop/blender/pycode/15depthplanes/render'
+bfolder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
 
 
 Lmodel = load_L_model()

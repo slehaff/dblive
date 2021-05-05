@@ -32,7 +32,7 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15trainMat'
+inputFolder = '/home/samir/Desktop/blender/pycode/15depthplanes'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -341,5 +341,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-680-mat-b8-Wrap-100-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-680-mat-Wrap-b8-100-V2.png',(1.0*combotot).astype(np.uint8))
+# model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-680-mat-b8-Wrap-100-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-200-depth-Wrap-b8-100-V2.png',(1.0*combotot).astype(np.uint8))

@@ -34,9 +34,9 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 50
-inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
-IMAGECOUNT = len(os.listdir(inputFolder))
+EPOCHS = 30
+inputFolder = '/home/samir/Desktop/blender/pycode/15depthplanes/'
+IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 tf.config.LogicalDeviceConfiguration(
     memory_limit=2000, experimental_priority=0
@@ -275,7 +275,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-250.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5')
     model.summary()
     return(model)
 
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNW-551-man-b8-300.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-330.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNW-200-depth-b8-30.png',
             (1.0*combotot).astype(np.uint8))
