@@ -34,8 +34,8 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 30
-inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
+EPOCHS = 50
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMat/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 tf.config.LogicalDeviceConfiguration(
@@ -149,7 +149,7 @@ to_aug_png_array(inputFolder+'render', 'kdata' , kwrap_images, IMAGECOUNT)
 
 # Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
 wrap_images = np.expand_dims(wrap_images, -1)
-unwrap_images = np.expand_dims(kwrap_images, -1)
+kwrap_images = np.expand_dims(kwrap_images, -1)
 print("input shape: {}".format(wrap_images.shape))
 print("output shape: {}".format(kwrap_images.shape))
 print(len(wrap_images))
@@ -275,12 +275,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNW-551-man-b8-300.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNWK-551-man-planes-b8-150.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 #########################################################################################################
 ######################################### TensorBoard ###################################################
 
@@ -296,7 +296,7 @@ checkpointer = ModelCheckpoint(
 def fct_train(model):
     for epoch in range(EPOCHS):
         print('epoch #:', epoch)
-        history_temp = model.fit(wrap_images, unwrap_images,
+        history_temp = model.fit(wrap_images, kwrap_images,
                                  batch_size=8,
                                  epochs=1,
                                  validation_split=0.2,
@@ -382,6 +382,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNWK-551-man-planes-b8-30.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-UNWK-551-depth-b8-30.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-UNWK-551-man-planes-b8-200.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-UNWK-551-depth-b8-200.png',
             (1.0*combotot).astype(np.uint8))
