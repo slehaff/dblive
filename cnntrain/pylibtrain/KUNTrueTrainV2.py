@@ -35,7 +35,7 @@ session = InteractiveSession(config=config)
 H = 160
 W = 160
 
-EPOCHS = 100
+EPOCHS = 5
 inputFolder = '/home/samir/Desktop/blender/pycode/Ntarget/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
@@ -246,7 +246,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-1300-Ntgt-b8-KUnw-100-V2.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15-1300-Ntgt-b8-KUnw-200-V2.h5')
     model.summary()
     return(model)
 
@@ -308,7 +308,7 @@ def DB_predict(i, x, y):
     #             (255.0*predicted_img).astype(np.uint8))
     # cv2.imwrite('validate/'+str(i)+'input.png',
     #             (255.0*x).astype(np.uint8))
-    combo = combImages(255.0*x, 255.0*predicted_img, 255.0*y)
+    combo = combImages(255.0*x,8*(np.round((255.0*predicted_img)/8)), 255.0*y)
     cv2.imwrite('validate/test/'+str(i)+'combo.png', (1.0*combo).astype(np.uint8))
     return(combo)
 
