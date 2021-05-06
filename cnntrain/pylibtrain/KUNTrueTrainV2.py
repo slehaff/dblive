@@ -20,11 +20,22 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNo
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 from tensorflow.keras.utils import plot_model
+########################################################################### tf bug fix    ############################################################################
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
+
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+
+#################################################################################################################################################################
+
+
 
 H = 160
 W = 160
 
-EPOCHS = 5
+EPOCHS = 100
 inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
@@ -217,7 +228,7 @@ UModel.summary()
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    sgd = optimizers.SGD(lr=1e-4, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = optimizers.SGD(lr=1e-5, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss='mean_squared_error',
                   metrics=['mse'])
     model.summary()
@@ -235,12 +246,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-50-V2.h5')
+        '/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-551-KUN-100-V2.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 
 # tf.keras.utils.plot_model(
@@ -327,6 +338,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-100-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UNet02-800-test-KUN-100-V2.png',
+model.save('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-551-KUN-200-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UNet02-551-test-KUN-200-V2.png',
             (1.0*combotot).astype(np.uint8))
