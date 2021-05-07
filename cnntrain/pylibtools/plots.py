@@ -67,33 +67,34 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(0,10):
-    folder1 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/30train800TF/render'+str(i)
+for i in range(0,1000,50):
+    folder1 = '/home/samir/Desktop/blender/pycode/Ntarget/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/Ntarget/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 
-    high = folder1 + '/unwrap.npy'
+    high = folder1 + '/kdata.npy'
     
     print(high)
     # colorhigh = cv2.imread(high, 1)
     # monohigh1 = make_grayscale(colorhigh)
     # monohigh1 = 255*normalize_image(monohigh1)
     monohigh1 = np.load(high)
+    monohigh1 = monohigh1
     print('unwrange=', np.ptp(monohigh1), np.max(monohigh1), np.min(monohigh1) )
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnunwrap.npy'
+    high1 = folder1 + '/nnkdata.npy'
     print(high1)
     # colorhigh = cv2.imread(high1, 1)
     # monohigh3 = make_grayscale(colorhigh)
     # monohigh3 = 255*normalize_image(monohigh3)
-    colorhigh = np.load(high1)
+    colorhigh = 34*(np.load(high1))
     print('unwrange=', np.ptp(colorhigh), np.max(colorhigh), np.min(colorhigh) )
 
     monohigh3 = colorhigh
 
-    high = folder1 + '/unwrap.png'
+    high = folder1 + '/im_wrap1.png'
     print(high)
     colorhigh = cv2.imread(high, 1)
     monohigh2 = make_grayscale(colorhigh)
@@ -102,11 +103,13 @@ for i in range(0,10):
     
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnunwrap.png'
+    high1 = folder1 + '/unwrap1.png'
     print(high1)
     colorhigh = cv2.imread(high1, 1)
     monohigh4 = make_grayscale(colorhigh)
     monohigh4 = 255*normalize_image(monohigh4)
+
+
     # colorhigh = np.load(high1)
     # monohigh3 = colorhigh
 
@@ -122,8 +125,8 @@ for i in range(0,10):
     # monohigh4 = 255*normalize_image(monohigh4)
 
     plt.plot(
-    x, monohigh1[:,80],'g',
-    x, monohigh3[:,80],'y')
+    x, monohigh1[:,80],'r',
+    x, monohigh3[:,80],'b')
     plt.ylabel(str(i)) 
     plt.show()
     plt.plot(

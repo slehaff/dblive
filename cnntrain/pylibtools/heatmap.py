@@ -11,17 +11,17 @@ def make_grayscale(img):
     return gray_img
 
 
-bfolder = '/home/samir/Desktop/blender/pycode/15trainMan/'
+bfolder = '/home/samir/Desktop/blender/pycode/Ntarget/'
 
 for i in range(0,len(os.listdir(bfolder)), 20):
     print(i)
     folder = bfolder +'render'+ str(i)
     print(folder)
-    f1 = folder + '/unwrap.png'
+    f1 = folder + '/kdata.png'
     imganal = cv2.imread(f1, 1)
     imganal = make_grayscale(imganal)
 
-    f2 = folder + '/nnunwrap.png'
+    f2 = folder + '/nnkdata.png'
     imgnn = cv2.imread(f2, 1)
     imgnn = make_grayscale(imgnn)
 
