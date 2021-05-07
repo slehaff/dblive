@@ -32,7 +32,7 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/Ntarget'
+inputFolder = '/home/samir/Desktop/blender/pycode/15trainMan'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
@@ -247,7 +247,7 @@ def load_model():
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 
 #########################################################################################################
@@ -341,5 +341,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-1300-Ntgt-b8-Wrap-20-V2.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15-1300-Ntgt-Wrap-b8-20-V2.png',(1.0*combotot).astype(np.uint8))
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-Wrap-200-V2.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15-551-tMan-Wrap-b8-200-V2.png',(1.0*combotot).astype(np.uint8))
