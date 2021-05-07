@@ -89,7 +89,7 @@ for i in range(0,1000,50):
     # colorhigh = cv2.imread(high1, 1)
     # monohigh3 = make_grayscale(colorhigh)
     # monohigh3 = 255*normalize_image(monohigh3)
-    colorhigh = 34*(np.load(high1))
+    colorhigh = 41*(np.load(high1))
     print('unwrange=', np.ptp(colorhigh), np.max(colorhigh), np.min(colorhigh) )
 
     monohigh3 = colorhigh
@@ -124,13 +124,15 @@ for i in range(0,1000,50):
     # monohigh4 = make_grayscale(colorhigh)
     # monohigh4 = 255*normalize_image(monohigh4)
 
-    plt.plot(
-    x, monohigh1[:,80],'r',
-    x, monohigh3[:,80],'b')
-    plt.ylabel(str(i)) 
-    plt.show()
-    plt.plot(
-    x, monohigh2[:,80],'r',
-    x, monohigh4[:,80],'b')
-    plt.ylabel(str(i)) 
-    plt.show()
+
+    for a in range(0,160,20):
+        plt.plot(
+        x, monohigh1[:,a],'r',
+        x, monohigh3[:,a],'b')
+        plt.ylabel(str(i)) 
+        plt.show()
+        plt.plot(
+        x, monohigh2[:,a],'r',
+        x, monohigh4[:,a],'b')
+        plt.ylabel(str(i)) 
+        plt.show()
