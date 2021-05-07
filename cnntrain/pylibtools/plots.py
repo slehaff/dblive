@@ -67,13 +67,13 @@ def makemonohigh(folder):
 
 
 x = range(160)
-for i in range(0,1000,50):
-    folder1 = '/home/samir/Desktop/blender/pycode/Ntarget/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/Ntarget/render'+str(i)
+for i in range(0,10):
+    folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 
-    high = folder1 + '/kdata.npy'
+    high = folder1 + '/unwrap1.npy'
     
     print(high)
     # colorhigh = cv2.imread(high, 1)
@@ -89,12 +89,12 @@ for i in range(0,1000,50):
     # colorhigh = cv2.imread(high1, 1)
     # monohigh3 = make_grayscale(colorhigh)
     # monohigh3 = 255*normalize_image(monohigh3)
-    colorhigh = 41*(np.load(high1))
+    colorhigh = 4*(np.load(high1))
     print('unwrange=', np.ptp(colorhigh), np.max(colorhigh), np.min(colorhigh) )
 
     monohigh3 = colorhigh
 
-    high = folder1 + '/im_wrap1.png'
+    high = folder1 + '/nnkdata.png'
     print(high)
     colorhigh = cv2.imread(high, 1)
     monohigh2 = make_grayscale(colorhigh)
@@ -103,7 +103,7 @@ for i in range(0,1000,50):
     
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/unwrap1.png'
+    high1 = folder1 + '/nnkunwrap.png'
     print(high1)
     colorhigh = cv2.imread(high1, 1)
     monohigh4 = make_grayscale(colorhigh)
