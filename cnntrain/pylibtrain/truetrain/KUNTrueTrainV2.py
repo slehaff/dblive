@@ -14,7 +14,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
-
+import kerastuner as kt
 from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
@@ -35,8 +35,8 @@ session = InteractiveSession(config=config)
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/dentalmix/'
+EPOCHS = 40
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/Ntarget/'
 IMAGECOUNT = len(os.listdir(inputFolder))-2
 
 
@@ -246,12 +246,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-100.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5')
     model.summary()
     return(model)
 
 
-model = load_model()
+# model = load_model()
 
 
 # tf.keras.utils.plot_model(
@@ -338,6 +338,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-44x-dentmix-Kunw-b8-200.png',
+# model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-44x-Ntarget-Kunw-b8-20.png',
             (1.0*combotot).astype(np.uint8))
