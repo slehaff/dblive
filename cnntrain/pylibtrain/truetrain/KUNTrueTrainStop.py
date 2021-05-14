@@ -20,6 +20,10 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNo
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 from tensorflow.keras.utils import plot_model
+from datetime import datetime
+from packaging import version
+
+
 ########################################################################### tf bug fix    ############################################################################
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
@@ -261,6 +265,10 @@ def load_model():
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
+
+
+logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
 early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-6, patience=3,verbose=1, restore_best_weights=True)
 
