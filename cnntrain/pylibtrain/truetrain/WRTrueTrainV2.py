@@ -266,22 +266,7 @@ checkpointer = ModelCheckpoint(
 
 
 
-# def fct_train(model):
-#     for epoch in range(EPOCHS):
-#         print('epoch #:', epoch)
-#         history_temp = model.fit(fringe_images, hwrap_images,
-#                                  batch_size=4,
-#                                  epochs=1,
-#                                  validation_split=0.2,
-#                                 #  callbacks=[checkpointer])
-#                                  callbacks=[early_callback])#  [tensorboard_callback, checkpointer, early_callback])
 
-#         loss.append(history_temp.history['loss'][0])
-#         val_loss.append(history_temp.history['val_loss'][0])
-#         # convweights.append(model.layers[0].get_weights()[0].squeeze())
-
-
-# fct_train(model)
 
 
 
