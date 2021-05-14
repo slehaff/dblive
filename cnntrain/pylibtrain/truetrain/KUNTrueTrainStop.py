@@ -1,10 +1,4 @@
 # changed sunday 11: Autoencoder module for instant depth determination
-import tensorflow as tf
-# add to the top of your code under import tensorflow as tf
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config=config)
-
 from tensorflow.keras import layers
 import numpy as np
 import os
@@ -17,25 +11,35 @@ from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import ModelCheckpoint
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
-import tkinter
+import kerastuner as kt
 from tensorflow.python.keras.layers import Layer, InputSpec
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
-import keras
-from datetime import datetime
-from packaging import version
+from tensorflow.keras.utils import plot_model
+########################################################################### tf bug fix    ############################################################################
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
+
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+
+#################################################################################################################################################################
+
+
 
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/dentalmix'
-IMAGECOUNT = len(os.listdir(inputFolder))-1
+EPOCHS = 40
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/Ntarget/'
+IMAGECOUNT = len(os.listdir(inputFolder))-2
 
-print(IMAGECOUNT,'Imagecount')
+
 def make_grayscale(img):
     # Transform color image to grayscale
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -76,8 +80,8 @@ def to_array(folder_path, array, file_count):
 
 def to_png_array(folder_path, filename, array, file_count):
     for i in range(file_count):
+        print('count:', i)
         myfile = folder_path + str(i)+'/'+ filename + '.png'
-        print(myfile)
         img = cv2.imread(myfile).astype(np.float32)
         img = resize(img, 160, 160)
         print('img:', img.shape)
@@ -108,23 +112,23 @@ def to_npy_array(folder_path, array, file_count):
 
 
 # Load and pre-process the training data
-fringe_images = []
-hwrap_images = []
+wrap_images = []
+k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+ '/render', 'image0', fringe_images, IMAGECOUNT) #im_wrap1
-to_png_array(inputFolder + '/render', 'im_wrap1' , hwrap_images, IMAGECOUNT) #kdata
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
 #========================================= Use with serverless folder structure ===============================
 # to_array('/home/samir/serverless/new1-469/1/wrap/', fringe_images, IMAGECOUNT)
 # to_array('/home/samir/serverless/new1-469/unwrap/', unwrap_images, IMAGECOUNT)
 
-# Expand the image dimension to conform with the shape required by tensorflow.keras and tensorflow, inputshape=(..., h, w, nchannels).
-fringe_images = np.expand_dims(fringe_images, -1)
-hwrap_images = np.expand_dims(hwrap_images, -1)
-print("input shape after expand: {}".format(fringe_images.shape))
+# Expand the image dimension to conform with the shape required by keras and tensorflow, inputshape=(..., h, w, nchannels).
+wrap_images = np.expand_dims(wrap_images, -1)
+k_images = np.expand_dims(k_images, -1)
+print("input shape: {}".format(wrap_images.shape))
 # print("output shape: {}".format(nom_images.shape))
-print(len(fringe_images))
+print(len(wrap_images))
 
 
 
@@ -241,8 +245,8 @@ model = UModel
 
 
 def load_model():
-    model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Wrap-b8-25.h5')
+    model = tf.keras.models.load_model(
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5')
     model.summary()
     return(model)
 
@@ -250,58 +254,26 @@ def load_model():
 # model = load_model()
 
 
-#########################################################################################################
-######################################### TensorBoard ###################################################
-
-logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
-early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-4, patience=3,verbose=1, restore_best_weights=True)
-
-##########################################################################################################
-
+# tf.keras.utils.plot_model(
+#    model, to_file='model.png', show_shapes=False, show_dtype=False,
+#     show_layer_names=True, rankdir='TB', expand_nested=False, dpi=96
+# )
 
 checkpointer = ModelCheckpoint(
     filepath="weights/weights.hdf5", verbose=1, save_best_only=True)
 
+early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-6, patience=3,verbose=1, restore_best_weights=True)
 
 
 
-# def fct_train(model):
-#     for epoch in range(EPOCHS):
-#         print('epoch #:', epoch)
-#         history_temp = model.fit(fringe_images, hwrap_images,
-#                                  batch_size=4,
-#                                  epochs=1,
-#                                  validation_split=0.2,
-#                                 #  callbacks=[checkpointer])
-#                                  callbacks=[early_callback])#  [tensorboard_callback, checkpointer, early_callback])
 
-#         loss.append(history_temp.history['loss'][0])
-#         val_loss.append(history_temp.history['val_loss'][0])
-#         # convweights.append(model.layers[0].get_weights()[0].squeeze())
-
-
-# fct_train(model)
-
-
-
-history = model.fit(fringe_images, hwrap_images,
-                            batch_size=4,
+history = model.fit(wrap_images, k_images,
+                            batch_size=2,
                             epochs=EPOCHS,
                             validation_split=0.2,
-                            callbacks=[tensorboard_callback, checkpointer, early_callback])
+                            callbacks=[checkpointer, early_callback])
 
 
-print(history.history.keys())
-# summarize history for accuracy
-# plt.plot(history.history['accuracy'])
-# plt.plot(history.history['val_accuracy'])
-# plt.title('model accuracy')
-# plt.ylabel('accuracy')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
-# summarize history for loss
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 plt.title('model loss')
@@ -309,6 +281,8 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+
+
 
 def plot():
     # Plot the training and validation losses
@@ -339,13 +313,13 @@ def DB_predict(i, x, y):
     #             (255.0*predicted_img).astype(np.uint8))
     # cv2.imwrite('validate/'+str(i)+'input.png',
     #             (255.0*x).astype(np.uint8))
-    combo = combImages(255.0*x, 255.0*predicted_img, 255.0*y)
+    combo = combImages(255*x,3*(np.round((255*predicted_img)/3)), 255*y)
     cv2.imwrite('validate/test/'+str(i)+'combo.png', (1.0*combo).astype(np.uint8))
     return(combo)
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder + '/render' + str(1)+'/im_wrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -354,19 +328,21 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/image0.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     inp_img = make_grayscale(img)
     #get_my_file('out/' + str(i)+'.png')
-    myfile = inputFolder + '/render' + str(i)+'/im_wrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/kdata.png'
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
     img = normalize_image255(img)
     out_img = make_grayscale(img)
+    # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Wrap-b8-100.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-44x-Ntarget-Wrap-b8-estop.png',(1.0*combotot).astype(np.uint8))
+# model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-44x-Ntarget-Kunw-b8-20.png',
+            (1.0*combotot).astype(np.uint8))
