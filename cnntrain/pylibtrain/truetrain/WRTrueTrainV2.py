@@ -25,7 +25,7 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNo
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Add
 from tensorflow.keras.layers import Input, Activation, UpSampling2D, add
 import keras
-from datetime import datetime
+import datetime
 from packaging import version
 
 H = 160
@@ -219,7 +219,7 @@ outputImage = Conv2D(1, (3, 3), padding='same')(A59)
 
 UModel = Model(inputImage, outputImage)
 UModel.summary()
-
+UModel.layers
 
 
 def compile_model(model):
@@ -238,24 +238,27 @@ convweights = []
 
 compile_model(UModel)
 model = UModel
+for i in range(len(model.layers)):
+    print(model.layers[i])
 
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Wrap-b8-25.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Wrap-b8-100.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 
 #########################################################################################################
 ######################################### TensorBoard ###################################################
 
-logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
-early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-4, patience=3,verbose=1, restore_best_weights=True)
+
+log_dir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-5, patience=3,verbose=1, restore_best_weights=True)
 
 ##########################################################################################################
 
