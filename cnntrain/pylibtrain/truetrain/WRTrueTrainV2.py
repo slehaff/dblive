@@ -238,8 +238,7 @@ convweights = []
 
 compile_model(UModel)
 model = UModel
-for i in range(len(model.layers)):
-    print(model.layers[i])
+
 
 
 def load_model():
@@ -250,6 +249,15 @@ def load_model():
 
 
 model = load_model()
+################################################# Feature Maps Display ###################################
+
+
+for i in range(len(model.layers)):
+    print(model.layers[i])
+layer_outputs = [layer.output for layer in model.layers]
+print('Layer_outputs:')
+for i in range(len(layer_outputs)):
+    print(layer_outputs[i])
 
 
 #########################################################################################################
