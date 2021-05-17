@@ -1,3 +1,7 @@
+# cannot easily visualize filters lower down
+from keras.applications.vgg16 import VGG16
+from matplotlib import pyplot
+
 # plot feature map of first conv layer for given image
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input
@@ -39,80 +43,72 @@ import sys
 
 
 
-########################################################################### tf bug fix    ############################################################################
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
-
-config = ConfigProto()
-config.gpu_options.allow_growth = True
-session = InteractiveSession(config=config)
-
-#################################################################################################################################################################
-
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
     model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-Wrap-200-V2.h5')
     return(model)
+# /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
     model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-KUnw-300-V2.h5')
     return(model)
 
-def make_grayscale(img):
-    # Transform color image to grayscale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    return gray_img
-
-def normalize_image(img):
-    # Normalizes the input image to range (0, 1) for visualization
-    img = img - np.min(img)
-    img = img/np.max(img)
-    return img
-
-def DB_predict( model, x):
-    predicted_img = model.predict(np.array([np.expand_dims(x, -1)]))
-    predicted_img = predicted_img.squeeze()
-    # tensorflow.keras.backend.clear_session()
-    return(predicted_img)
-
-
-
 
 # load the model
 # model = VGG16()
-model = load_L_model()
+model = load_H_model()
+# retrieve weights from the second hidden layer
+filters, biases = model.layers[1].get_weights()
+# normalize filter values to 0-1 so we can visualize them
+f_min, f_max = filters.min(), filters.max()
+filters = (filters - f_min) / (f_max - f_min)
+# plot first few filters
+n_filters, ix = 6, 1
+for i in range(n_filters):
+	# get the filter
+	f = filters[:, :, :, i]
+	# plot each channel separately
+	for j in range(3):
+		# specify subplot and turn of axis
+		ax = pyplot.subplot(n_filters, 3, ix)
+		ax.set_xticks([])
+		ax.set_yticks([])
+		# plot filter channel in grayscale
+		pyplot.imshow(f[:, :, j], cmap='gray')
+		ix += 1
+# show the figure
+pyplot.show()
+
+# load the model
+model = VGG16()
 # redefine model to output right after the first hidden layer
 model = Model(inputs=model.inputs, outputs=model.layers[1].output)
 model.summary()
 # load the image with the required shape
-wrapin ='/home/samir/Desktop/blender/pycode/15trainMan/render0/im_wrap1.png'
-# img = load_img(mybird, target_size=(160, 160))
-img = cv2.imread(wrapin, 1).astype(np.float32)
-img = make_grayscale(img)
+mybird ='/home/samir/dblive/cnntrain/pylibtools/bird.jpg'
+img = load_img(mybird, target_size=(224, 224))
 # convert the image to an array
-# img = img_to_array(img)
-# # expand dimensions so that it represents a single 'sample'
-# img = expand_dims(img, axis=0)
-# # prepare the image (e.g. scale pixel values for the vgg)
-# img = preprocess_input(img)
-# # get feature map for first hidden layer
-
-img = normalize_image(img)
-
-feature_maps = DB_predict(model, img)
+img = img_to_array(img)
+# expand dimensions so that it represents a single 'sample'
+img = expand_dims(img, axis=0)
+# prepare the image (e.g. scale pixel values for the vgg)
+img = preprocess_input(img)
+# get feature map for first hidden layer
+feature_maps = model.predict(img)
 # plot all 64 maps in an 8x8 squares
-square = 5
+square = 8
 ix = 1
-for _ in range(6):
-	for _ in range(5):
+for _ in range(square):
+	for _ in range(square):
 		# specify subplot and turn of axis
-		print('ix =', ix)
-		ax = pyplot.subplot(5, 6, ix)
+		ax = pyplot.subplot(square, square, ix)
 		ax.set_xticks([])
 		ax.set_yticks([])
 		# plot filter channel in grayscale
-		print("Shape of the array = ",np.shape(feature_maps));
-		pyplot.imshow(feature_maps[ :, :, ix-1], cmap='gray')
+		pyplot.imshow(feature_maps[0, :, :, ix-1], cmap='gray')
 		ix += 1
 # show the figure
 pyplot.show()
+
+
+
