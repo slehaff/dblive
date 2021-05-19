@@ -39,9 +39,9 @@ session = InteractiveSession(config=config)
 H = 160
 W = 160
 
-EPOCHS = 40
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/Ntarget/'
-IMAGECOUNT = len(os.listdir(inputFolder))-2
+EPOCHS = 100
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
+IMAGECOUNT = 1000# len(os.listdir(inputFolder))-2
 
 
 def make_grayscale(img):
@@ -119,7 +119,7 @@ def to_npy_array(folder_path, array, file_count):
 wrap_images = []
 k_images = []
 #========================================= Use with dblive folder structure ===============================
-to_png_array(inputFolder+'render', 'unwrap1', wrap_images, IMAGECOUNT)
+to_png_array(inputFolder+'render', 'im_wrap1', wrap_images, IMAGECOUNT)
 to_png_array(inputFolder+'render', 'kdata' , k_images, IMAGECOUNT)
 
 
@@ -250,12 +250,12 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch3K-Kunw-b8-100.h5')
     model.summary()
     return(model)
 
 
-# model = load_model()
+model = load_model()
 
 
 # tf.keras.utils.plot_model(
@@ -270,7 +270,7 @@ checkpointer = ModelCheckpoint(
 logdir = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 
-early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-7, patience=3,verbose=1, restore_best_weights=True)
+early_callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=1e-5, patience=3,verbose=1, restore_best_weights=True)
 
 
 
@@ -279,7 +279,7 @@ history = model.fit(wrap_images, k_images,
                             batch_size=2,
                             epochs=EPOCHS,
                             validation_split=0.2,
-                            callbacks=[tensorboard_callback, checkpointer, early_callback])
+                            callbacks=[tensorboard_callback, checkpointer])#, early_callback])
 
 
 plt.plot(history.history['loss'])
@@ -327,7 +327,7 @@ def DB_predict(i, x, y):
 
 
 # get_my_file('inp/' + str(1)+'.png')
-myfile = inputFolder+'render' + str(1)+'/unwrap1.png'
+myfile = inputFolder+'render' + str(1)+'/im_wrap1.png'
 img = cv2.imread(myfile).astype(np.float32)
 img = resize(img, 160, 160)
 img = normalize_image255(img)
@@ -336,7 +336,7 @@ combotot = combImages(inp_img, inp_img, inp_img)
 for i in range(0, 90, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
-    myfile = inputFolder+'render' + str(i)+'/unwrap1.png'
+    myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
     print(myfile)
     img = cv2.imread(myfile).astype(np.float32)
     img = resize(img, 160, 160)
@@ -351,6 +351,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-# model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-44x-dentmix-Kunw-b8-200.h5', save_format='h5')
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch3K-Kunw-b8-100.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN15may-44x-Ntarget-Kunw-b8-20.png',
             (1.0*combotot).astype(np.uint8))

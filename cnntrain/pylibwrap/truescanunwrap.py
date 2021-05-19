@@ -404,7 +404,7 @@ def mydepth():
 
 def myrun():
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder/'
-    folder = '/home/samir/Desktop/blender/pycode/15may21/dentalmix/'
+    folder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
     count=  len(os.listdir(folder))
     print(count)
 

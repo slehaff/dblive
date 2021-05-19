@@ -55,7 +55,7 @@ def load_H_model():
     return(model)
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-KUnw-300-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch3K-Kunw-b8-100.h5')
     return(model)
 
 def make_grayscale(img):

@@ -120,24 +120,23 @@ def DB_predict( model, x):
 
 
 
+
 def nnHprocess(folder):
-    high = folder + 'image0.png' #'blenderimage0.png' or 'image0.png'
+    high = folder + 'image0.png' #'blenderimage0.png'
     image1 = cv2.imread(high, 1).astype(np.float32)
-    # black = folder + 'image9.png' #'' blenderblack.png or 'image9.png'
-    # image2 = cv2.imread(black,1).astype(np.float32)
+    black = folder + 'image9.png' #'' blenderblack.png
+    image2 = cv2.imread(black,1).astype(np.float32)
     image = image1 #- image2
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
-    mask = np.load(folder+'mask.npy')
-    inp_1 = np.multiply(np.logical_not(mask), inp_1)
-
+    # mask = np.load(folder+'mask.npy')
+    # inp_1 = np.multiply(np.logical_not(mask), inp_1)
+    # Hmodel = load_H_model()
 
     start = time.time()
     predicted_img = DB_predict(Hmodel, inp_1)
     end = time.time()
     print('elapsed high:', end-start)
-    mask = np.load(folder+'mask.npy')
-    predicted_img = np.multiply(np.logical_not(mask), predicted_img)
 
     # mask = np.load(folder+'mask.npy')
     # wrapH = np.multiply(np.logical_not(mask), predicted_img)
@@ -448,8 +447,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/Ntarget/render'
-bfolder = '/home/samir/Desktop/blender/pycode/Ntarget/'
+folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
 
 
 Lmodel = load_L_model()

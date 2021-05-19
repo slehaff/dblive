@@ -22,7 +22,10 @@ import time
 import argparse
 import sys
 # import myglobals
-
+# add to the top of your code under import tensorflow as tf
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
 
 
 
@@ -68,12 +71,12 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-WUN-200-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-Wrap-200-V2.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-800-KUN-110-V3.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-KUnw-300-V2.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -460,8 +463,8 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/stitch2/render'
-bfolder = '/home/samir/Desktop/blender/pycode/stitch2/'
+folder = '/home/samir/Desktop/blender/pycode/inputscans/render'
+bfolder = '/home/samir/Desktop/blender/pycode/inputscans/'
 
 
 Lmodel = load_L_model()
@@ -477,10 +480,10 @@ for i in range(len(os.listdir(bfolder))):
     # makemonohigh(folder+'i')
 
     nnHprocess(folder + str(i)+'/')
-    nnLprocess(folder + str(i)+'/')
-    unwrap_k(folder + str(i)+'/')
-    newDepth(folder+ str(i), 400)
-    nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
+    # nnLprocess(folder + str(i)+'/')
+    # unwrap_k(folder + str(i)+'/')
+    # newDepth(folder+ str(i), 400)
+    # nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
 
     # repairK(folder + str(i)+'/'+'unwrap1.png', folder + str(i)+'/'+'nnkdata.png', folder + str(i)+'/'+'krepdata.png' )
 
