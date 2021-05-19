@@ -85,7 +85,7 @@ model = load_L_model()
 model = Model(inputs=model.inputs, outputs=model.layers[1].output)
 model.summary()
 # load the image with the required shape
-wrapin ='/home/samir/Desktop/blender/pycode/15trainMan/render0/im_wrap1.png'
+wrapin ='/home/samir/Desktop/blender/pycode/inputscans/render0/unwrap1.png'
 # img = load_img(mybird, target_size=(160, 160))
 img = cv2.imread(wrapin, 1).astype(np.float32)
 img = make_grayscale(img)
