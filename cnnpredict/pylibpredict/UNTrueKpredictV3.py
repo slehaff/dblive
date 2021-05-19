@@ -73,7 +73,7 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15-551-tMan-b8-Wrap-200-V2.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-200.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
@@ -145,13 +145,14 @@ def nnHprocess(folder):
     cv2.imwrite( folder + 'unwrap1.png',255*predicted_img)
     return  #(predicted_img[0], predicted_img[1])
 
+
 def nnLprocess(folder):
     high = folder + 'unwrap1.png'
     image = cv2.imread(high, 1).astype(np.float32)
     inp_1 = normalize_image255(image)
     inp_1 = make_grayscale(inp_1)
-    mask = np.load(folder+'mask.npy')
-    inp_1 = np.multiply(np.logical_not(mask), inp_1)
+    # mask = np.load(folder+'mask.npy')
+    # inp_1 = np.multiply(np.logical_not(mask), inp_1)
     # mask = np.load(folder+'mask.npy')
     # inp_1 = np.multiply(np.logical_not(mask), inp_1)
     # Hmodel = load_H_model()
@@ -160,8 +161,8 @@ def nnLprocess(folder):
     predicted_img = DB_predict(Lmodel, inp_1)
     end = time.time()
     print('elapsed low:', end-start)
-    mask = np.load(folder+'mask.npy')
-    predicted_img = np.multiply(np.logical_not(mask), predicted_img)
+    # mask = np.load(folder+'mask.npy')
+    # predicted_img = np.multiply(np.logical_not(mask), predicted_img)
 
 
     nnkdata= 3*(np.round((255*predicted_img)/3))

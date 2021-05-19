@@ -480,8 +480,8 @@ for i in range(len(os.listdir(bfolder))):
     # makemonohigh(folder+'i')
 
     nnHprocess(folder + str(i)+'/')
-    # nnLprocess(folder + str(i)+'/')
-    # unwrap_k(folder + str(i)+'/')
+    nnLprocess(folder + str(i)+'/')
+    unwrap_k(folder + str(i)+'/')
     # newDepth(folder+ str(i), 400)
     # nngenerate_pointcloud(folder+str(i) + '/image8.png', folder+str(i) + '/mask.png', folder+str(i) + '/nndepth.npy', folder+str(i) +'/pointcl-nndepth.ply')
 
