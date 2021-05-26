@@ -448,15 +448,15 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/15may21/testbatch/render'
-bfolder = '/home/samir/Desktop/blender/pycode/15may21/testbatch/'
+folder = '/home/samir/Desktop/blender/pycode/15may21/test/render'
+bfolder = '/home/samir/Desktop/blender/pycode/15may21/test/'
 
 
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 
-for i in range(len(os.listdir(bfolder))-1):
+for i in range(100):# (len(os.listdir(bfolder))-1):
     # folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 

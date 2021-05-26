@@ -21,7 +21,7 @@ W = 160
 
 
 # model = Unet()
-infolder = '/home/samir/Desktop/blender/pycode/15may21/testbatch/'
+infolder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
 wrapfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/wrap/'
 kfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/k/'
 mfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/'
@@ -94,4 +94,4 @@ def shuffledata():
         print(i)
 
 shuffledata()
-# reshuffledata()
+reshuffledata()
