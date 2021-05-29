@@ -32,8 +32,8 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batch'
-IMAGECOUNT = 1000 # len(os.listdir(inputFolder))-1
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/test'
+IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
 def make_grayscale(img):
@@ -243,7 +243,7 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-100.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-200.h5')
     model.summary()
     return(model)
 

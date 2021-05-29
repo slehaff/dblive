@@ -31,6 +31,7 @@ import sys
 
 
 
+
 PI = np.pi
 
 
@@ -165,7 +166,7 @@ def nnLprocess(folder):
     # predicted_img = np.multiply(np.logical_not(mask), predicted_img)
 
 
-    nnkdata= 3*(np.round((255*predicted_img)/3))
+    nnkdata= 5*(np.round((255*predicted_img)/5))
     np.save(folder + 'nnkdata.npy', nnkdata/255, allow_pickle=False)
     # prdicted_img = np.round(predicted_img*17/(np.max(predicted_img)))
     cv2.imwrite( folder + 'nnkdata.png',nnkdata)
@@ -456,7 +457,7 @@ Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 
-for i in range(100):# (len(os.listdir(bfolder))-1):
+for i in range (len(os.listdir(bfolder))-1):
     # folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 

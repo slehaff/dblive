@@ -40,8 +40,8 @@ H = 160
 W = 160
 
 EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
-IMAGECOUNT = 1000# len(os.listdir(inputFolder))-2
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/test/'
+IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 
 def make_grayscale(img):
@@ -333,7 +333,7 @@ img = resize(img, 160, 160)
 img = normalize_image255(img)
 inp_img =  make_grayscale(img)
 combotot = combImages(inp_img, inp_img, inp_img)
-for i in range(0, 90, 1):
+for i in range(0, 5, 1):
     print(i)
     # get_my_file('inp/' + str(i)+'.png')
     myfile = inputFolder+'render' + str(i)+'/im_wrap1.png'
