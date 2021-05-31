@@ -31,9 +31,9 @@ from packaging import version
 H = 160
 W = 160
 
-EPOCHS = 100
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batch'
-IMAGECOUNT = 1000 # len(os.listdir(inputFolder))-1
+EPOCHS = 10
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc'
+IMAGECOUNT = len(os.listdir(inputFolder))-1
 
 print(IMAGECOUNT,'Imagecount')
 def make_grayscale(img):
@@ -224,7 +224,7 @@ UModel.layers
 
 def compile_model(model):
     # model = Model(input_image, output_image)
-    sgd = optimizers.SGD(lr=1e-6, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = optimizers.SGD(lr=1e-6, decay=1e-4, momentum=0.9, nesterov=True)
     model.compile(optimizer='adam', loss='mean_squared_error',
                   metrics=['mse'])
     model.summary()
@@ -243,12 +243,12 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-100.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-200.h5')
     model.summary()
     return(model)
 
 
-model = load_model()
+# model = load_model()
 ################################################# Feature Maps Display ###################################
 
 
@@ -282,7 +282,7 @@ checkpointer = ModelCheckpoint(
 
 
 history = model.fit(fringe_images, hwrap_images,
-                            batch_size=2,
+                            batch_size=8,
                             epochs=EPOCHS,
                             validation_split=0.2,
                             callbacks=[tensorboard_callback, checkpointer])#, early_callback])
@@ -364,5 +364,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-200.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-batch1k-Wrap-b2-200.png',(1.0*combotot).astype(np.uint8))
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc6k-Wrap-b2-10.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-batchsc6k-Wrap-b2-10.png',(1.0*combotot).astype(np.uint8))
