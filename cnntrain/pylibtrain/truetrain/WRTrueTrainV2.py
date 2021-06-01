@@ -247,11 +247,7 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-<<<<<<< HEAD
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc6k-Wrap-b2-30.h5')
-=======
         '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc2k-Wrap-b2-60.h5')
->>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
     model.summary()
     return(model)
 
