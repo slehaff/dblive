@@ -368,10 +368,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-<<<<<<< HEAD
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc3k-Wrap-b2-60.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-batchsc3k-Wrap-b2-60.png',(1.0*combotot).astype(np.uint8))
-=======
 model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN15may-batchsc4k-Wrap-b2-80.png',(1.0*combotot).astype(np.uint8))
->>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
