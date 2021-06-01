@@ -74,12 +74,12 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch1k-Wrap-b2-200.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
 def load_L_model():
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch3K-Kunw-b8-100.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch4K-Kunw-b2-60.h5')
     return(model)
 
 def makemonohigh(folder):
@@ -166,7 +166,7 @@ def nnLprocess(folder):
     # predicted_img = np.multiply(np.logical_not(mask), predicted_img)
 
 
-    nnkdata= 5*(np.round((255*predicted_img)/5))
+    nnkdata= 3*(np.round((255*predicted_img)/3))
     np.save(folder + 'nnkdata.npy', nnkdata/255, allow_pickle=False)
     # prdicted_img = np.round(predicted_img*17/(np.max(predicted_img)))
     cv2.imwrite( folder + 'nnkdata.png',nnkdata)

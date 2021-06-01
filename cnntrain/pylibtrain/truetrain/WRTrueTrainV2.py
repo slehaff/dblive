@@ -33,7 +33,11 @@ W = 160
 
 EPOCHS = 20
 inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc'
+<<<<<<< HEAD
 IMAGECOUNT = 3000 # len(os.listdir(inputFolder))-1
+=======
+IMAGECOUNT = 4000 #len(os.listdir(inputFolder))-1
+>>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
 
 print(IMAGECOUNT,'Imagecount')
 def make_grayscale(img):
@@ -243,7 +247,11 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
+<<<<<<< HEAD
         '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc6k-Wrap-b2-30.h5')
+=======
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc2k-Wrap-b2-60.h5')
+>>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
     model.summary()
     return(model)
 
@@ -364,5 +372,10 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
+<<<<<<< HEAD
 model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc3k-Wrap-b2-60.h5', save_format='h5')
 cv2.imwrite('validate/'+'UN15may-batchsc3k-Wrap-b2-60.png',(1.0*combotot).astype(np.uint8))
+=======
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-batchsc4k-Wrap-b2-80.png',(1.0*combotot).astype(np.uint8))
+>>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
