@@ -6,7 +6,7 @@ import PIL
 from PIL import Image, ImageOps
 import random
 
-inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchtr/'
+inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc/'
 outputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc/'
 
 def reducedcopy(input,output):
@@ -66,6 +66,6 @@ def resized(input, output, count0, min, max):
         cv2.imwrite(output+'render'+str(i+count0)+'/' +'kdata.png', kdata)
 
 
-resized(inputFolder, outputFolder,3000,160,270)
+resized(inputFolder, outputFolder,2000,160,270)
 
 
