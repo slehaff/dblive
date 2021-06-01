@@ -33,11 +33,7 @@ W = 160
 
 EPOCHS = 20
 inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc'
-<<<<<<< HEAD
-IMAGECOUNT = 3000 # len(os.listdir(inputFolder))-1
-=======
 IMAGECOUNT = 4000 #len(os.listdir(inputFolder))-1
->>>>>>> 4fb8aff10ea438e0678736f9e9118b005cff477f
 
 print(IMAGECOUNT,'Imagecount')
 def make_grayscale(img):
