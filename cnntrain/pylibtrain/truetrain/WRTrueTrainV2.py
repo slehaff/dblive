@@ -243,7 +243,7 @@ model = UModel
 
 def load_model():
     model = tensorflow.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc2k-Wrap-b2-60.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5')
     model.summary()
     return(model)
 
@@ -364,5 +364,5 @@ for i in range(0, 90, 1):
     out_img = make_grayscale(img)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-batchsc4k-Wrap-b2-80.png',(1.0*combotot).astype(np.uint8))
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-100.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-batchsc4k-Wrap-b2-100.png',(1.0*combotot).astype(np.uint8))

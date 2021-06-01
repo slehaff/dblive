@@ -39,7 +39,7 @@ session = InteractiveSession(config=config)
 H = 160
 W = 160
 
-EPOCHS = 30
+EPOCHS = 20
 inputFolder = '/home/samir/Desktop/blender/pycode/15may21/batchsc/'
 IMAGECOUNT = len(os.listdir(inputFolder))-1
 
@@ -250,7 +250,7 @@ model = UModel
 
 def load_model():
     model = tf.keras.models.load_model(
-        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch4K-Kunw-b2-30.h5')
+        '/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch4K-Kunw-b2-60.h5')
     model.summary()
     return(model)
 
@@ -351,6 +351,6 @@ for i in range(0, 90, 1):
     # out_img = np.round(out_img/2)
     combo = DB_predict(i, inp_img, out_img)
     combotot = np.concatenate((combotot, combo), axis=0)
-model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch4K-Kunw-b2-60.h5', save_format='h5')
-cv2.imwrite('validate/'+'UN15may-batch4K-Kunw-b2-60.png',
+model.save('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batch4K-Kunw-b2-80.h5', save_format='h5')
+cv2.imwrite('validate/'+'UN15may-batch4K-Kunw-b2-80.png',
             (1.0*combotot).astype(np.uint8))

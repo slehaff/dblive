@@ -74,7 +74,7 @@ def normalize_image(img):
 
 def load_H_model():
     # model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UNmodels/UNet02-224-fringe-wrapdata'+'-200-adam-noBN.h5')
-    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-80.h5')
+    model = tensorflow.keras.models.load_model('/home/samir/dblive/cnnpredict/models/UN15models/UN15may-batchsc4k-Wrap-b2-100.h5')
     return(model)
 # /home/samir/dblive/cnnpredict/models/cnnres01-220-modelwrap1'+'-200-adam-noBN.h5
 
@@ -457,7 +457,7 @@ Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 
-for i in range (len(os.listdir(bfolder))-1):
+for i in range(100):# (len(os.listdir(bfolder))-1):
     # folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
