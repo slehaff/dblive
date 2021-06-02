@@ -68,33 +68,32 @@ def makemonohigh(folder):
 
 x = range(160)
 for i in range(0,10):
-    folder1 = '/home/samir/Desktop/blender/pycode/inputscans/render'+ str(i)
-    folder2 = '/home/samir/Desktop/blender/pycode/inputscans/render'+str(i)
+    folder1 = '/home/samir/Desktop/blender/pycode/15trainMat/render'+ str(i)
+    folder2 = '/home/samir/Desktop/blender/pycode/15trainMat/render'+str(i)
 
     monohigh = np.zeros((H, W), dtype=np.float64)
 
-    high = folder1 + '/unwrap1.npy'
+    high = folder1 + '/kdata.png'
     
     print(high)
-    # colorhigh = cv2.imread(high, 1)
-    # monohigh1 = make_grayscale(colorhigh)
-    # monohigh1 = 255*normalize_image(monohigh1)
-    monohigh1 = np.load(high)
+    colorhigh = cv2.imread(high, 1)
+    monohigh1 = make_grayscale(colorhigh)
+    monohigh1 = 255*normalize_image(monohigh1)
+    # monohigh1 = np.load(high)
     monohigh1 = monohigh1
     print('unwrange=', np.ptp(monohigh1), np.max(monohigh1), np.min(monohigh1) )
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnkdata.npy'
+    high1 = folder1 + '/nnkdata.png'
     print(high1)
-    # colorhigh = cv2.imread(high1, 1)
-    # monohigh3 = make_grayscale(colorhigh)
-    # monohigh3 = 255*normalize_image(monohigh3)
-    colorhigh = 4*(np.load(high1))
-    print('unwrange=', np.ptp(colorhigh), np.max(colorhigh), np.min(colorhigh) )
+    colorhigh = cv2.imread(high1, 1)
+    monohigh3 = make_grayscale(colorhigh)
+    monohigh3 = 255*normalize_image(monohigh3)
+    # colorhigh = 4*(np.load(high1))
 
-    monohigh3 = colorhigh
 
-    high = folder1 + '/nnkdata.png'
+
+    high = folder1 + '/im_wrap1.png'
     print(high)
     colorhigh = cv2.imread(high, 1)
     monohigh2 = make_grayscale(colorhigh)
@@ -103,7 +102,7 @@ for i in range(0,10):
     
     
     # high = folder1 + '/depth.png'
-    high1 = folder1 + '/nnkunwrap.png'
+    high1 = folder1 + '/unwrap1.png'
     print(high1)
     colorhigh = cv2.imread(high1, 1)
     monohigh4 = make_grayscale(colorhigh)
@@ -120,6 +119,8 @@ for i in range(0,10):
     # monohigh2 = 255*normalize_image(monohigh2)
     # high = folder2 + '/im_wrap1.png'
     # colorhigh = cv2.imread(high, 1)
+
+
     # colorhigh = resize(colorhigh, W, H)
     # monohigh4 = make_grayscale(colorhigh)
     # monohigh4 = 255*normalize_image(monohigh4)
@@ -128,6 +129,7 @@ for i in range(0,10):
     for a in range(0,160,20):
         plt.plot(
         x, monohigh1[:,a],'r',
+        x,monohigh4[:,a],'g',
         x, monohigh3[:,a],'b')
         plt.ylabel(str(i)) 
         plt.show()
