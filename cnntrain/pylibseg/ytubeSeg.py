@@ -30,14 +30,14 @@ from keras.utils import normalize
 
 
 #Resizing images, if needed
-SIZE_X = 128 
-SIZE_Y = 128
-n_classes=4 #Number of classes for segmentation
+SIZE_X = 160 
+SIZE_Y = 160
+n_classes=18 #Number of classes for segmentation
 
 #Capture training image info as a list
 train_images = []
 
-for directory_path in glob.glob("128_patches/images/"):
+for directory_path in glob.glob("160_patches/images/"):
     for img_path in glob.glob(os.path.join(directory_path, "*.tif")):
         img = cv2.imread(img_path, 1)       
         #img = cv2.resize(img, (SIZE_Y, SIZE_X))

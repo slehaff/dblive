@@ -21,12 +21,12 @@ W = 160
 
 
 # model = Unet()
-infolder = '/home/samir/Desktop/blender/pycode/scans5-400/'
-wrapfolder ='/home/samir/Desktop/blender/pycode/segmentation/wrap/'
-kfolder ='/home/samir/Desktop/blender/pycode/segmentation/k/'
-mfolder ='/home/samir/Desktop/blender/pycode/segmentation/'
-hotkfolder = '/home/samir/Desktop/blender/pycode/segmentation/hotkey/'
-nnkfolder = '/home/samir/Desktop/blender/pycode/segmentation/nnk/'
+infolder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
+wrapfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/wrap/'
+kfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/k/'
+mfolder ='/home/samir/Desktop/blender/pycode/15may21/segbatch/'
+hotkfolder = '/home/samir/Desktop/blender/pycode/15may21/segbatch/hotkey/'
+nnkfolder = '/home/samir/Desktop/blender/pycode/15may21/segbatch/nnk/'
 ######################################## Data Prepare ################################
 def make_grayscale(img):
     # Transform color image to grayscale
@@ -41,8 +41,6 @@ def mask(folder):
     img1 = np.zeros((H, W), dtype=np.float)
     img1 = cv2.imread(color, 1).astype(np.float32)
     gray = make_grayscale(img1)
-
-
     black = folder + 'blenderblack.png'
     img2 = np.zeros((H, W), dtype=np.float)
     img2 = cv2.imread(black, 0).astype(np.float32)
@@ -66,7 +64,8 @@ def applymask(inputfolder,inputfile):
 
 
 def reshuffledata():
-    for i in range(len(os.listdir(infolder))):
+    for i in range(len(os.listdir(infolder))-1):
+        print(i)
         masked =applymask(infolder + 'render'+ str(i) , '/nnkdata.png')
         masked = np.round(masked*17/(np.max(masked)))
         # print( 'max:', np.max(masked))
@@ -90,10 +89,6 @@ def shuffledata():
             print('c:',c)
             hotmask[:,:,c] = cmask
         np.save(hotkfolder+ 'npimg'+ str(i)+'.npy', hotmask)
-        
-        
-
-
         masked =applymask(infolder + 'render'+ str(i) , '/im_wrap1.png')
         cv2.imwrite(wrapfolder + 'img'+ str(i) +  '.png', masked)
         print(i)

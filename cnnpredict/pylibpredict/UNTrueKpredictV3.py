@@ -458,9 +458,8 @@ Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 
-for i in range(5):#  (len(os.listdir(bfolder))-1):
-    # folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
-    # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
+for i in range(len(os.listdir(bfolder))-1):
+
 
     print('i:', i)
     mask(folder+str(i)+'/')
