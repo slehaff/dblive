@@ -166,7 +166,7 @@ def nnLprocess(folder):
     # predicted_img = np.multiply(np.logical_not(mask), predicted_img)
 
 
-    nnkdata= 3*(np.round((255*predicted_img)/3))
+    nnkdata= 1*(np.round((255*predicted_img)/1))
     np.save(folder + 'nnkdata.npy', nnkdata/255, allow_pickle=False)
     # prdicted_img = np.round(predicted_img*17/(np.max(predicted_img)))
     cv2.imwrite( folder + 'nnkdata.png',nnkdata)
@@ -182,8 +182,9 @@ def unwrap_k(folder):
     wraphigh = np.zeros((H, W), dtype=np.float64)
     unwrapdata = np.zeros((H, W), dtype=np.float64)
     nnkdata = np.load(folder + '/nnkdata.npy')  # Use a factor of 37.5 when using nnkdata!
+    print('nnkdata range = ', np.ptp(nnkdata))
 
-    nnkdata = np.round(40*nnkdata)  # Use a factor of 37.5 when using nnkdata!
+    nnkdata = np.round(40.3*nnkdata)  # Use a factor of 37.5 when using nnkdata!
     # kdata = np.round(kdata/4)
     # kdata = kdata*4
     # kdata = np.matrix.round(45*kdata)
@@ -193,8 +194,8 @@ def unwrap_k(folder):
     # wraphigh = wraphigh - np.min(wraphigh)
     # wraphigh = wraphigh/ np.max(wraphigh)
     wraphigh = wraphigh*2*PI
-    print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
-    print('nnkdatarange=', np.ptp(nnkdata), np.max(nnkdata), np.min(nnkdata) )
+    # print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
+    # print('nnkdatarange=', np.ptp(nnkdata), np.max(nnkdata), np.min(nnkdata) )
     # wraphigh = normalize_image(wraphigh)
     # wraphigh = 2*PI*wraphigh
     # print('highrange=', np.ptp(wraphigh), np.max(wraphigh), np.min(wraphigh) )
@@ -449,15 +450,15 @@ def makeclouds(scanfolder, count):
 ####################################################################################################################
 
 # folder = '/home/samir/serverless/new1-469/1/fringeA/' + str(i)+'.png'
-folder = '/home/samir/Desktop/blender/pycode/15trainMat/render'
-bfolder = '/home/samir/Desktop/blender/pycode/15trainMat/'
+folder = '/home/samir/Desktop/blender/pycode/15may21/batch/render'
+bfolder = '/home/samir/Desktop/blender/pycode/15may21/batch/'
 
 
 Lmodel = load_L_model()
 Hmodel = load_H_model()
 
 
-for i in range(100):#  (len(os.listdir(bfolder))-1):
+for i in range(5):#  (len(os.listdir(bfolder))-1):
     # folder = '/home/samir/Desktop/blender/pycode/15trainMan/render'
     # folder = '/home/samir/db3/scan/static/scan_folder/scan_im_folder'
 
